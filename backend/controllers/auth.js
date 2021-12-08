@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Model = require('../models/Model');
+const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ ;
+const PASSWORD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$/;
 require('dotenv').config({path: '../config/.env'});
 
 exports.signup = (req, res, next) => {
@@ -12,7 +14,15 @@ exports.signup = (req, res, next) => {
     if (email == null || firstname == null || lastname == null || pseudo == null || password == null) {
         return res.status(400).json({'error': 'missing parameters'})
     }
-    ;
+
+    if(!EMAIL_REGEX.test(email)){
+        return res.status(400).json({'error': 'Enter valid email adress'})
+    }
+
+    if(!PASSWORD_REGEX.test(password)){
+        return res.status(400).json({'error': 'Password must be between 4 and 8 characters and must include at least one upper case letter, one lower case letter, and one numeric digit.'})
+    }
+
     Model.User.findOne({
         attributes: ['email'],
         where: {email: email}
@@ -30,8 +40,10 @@ exports.signup = (req, res, next) => {
                             deleted: false,
                             role_id: 0
                         })
-                            .then(() => res.status(201).json({'UserId': user.id}))
-                            .catch(error => res.status(500).json({error}));
+                            .then(function (user) {
+                                res.status(201).json({'UserId': user.id})
+                            })
+                            .catch(error => res.status(500).json({'error':'create error'}));
                     })
                     .catch();
             } else {
