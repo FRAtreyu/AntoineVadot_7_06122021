@@ -38,7 +38,6 @@ exports.signup = (req, res, next) => {
                             pseudo: pseudo,
                             password: hash,
                             deleted: false,
-                            role_id: 0
                         })
                             .then(function (user) {
                                 res.status(201).json({'UserId': user.id})

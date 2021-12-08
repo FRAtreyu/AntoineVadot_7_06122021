@@ -57,10 +57,9 @@ const Comment = sequelize.define('comment', {
 exports.Comment = Comment;
 
 
-User.belongsTo(Role);
-Comment.belongsTo(Post);
-Post.belongsTo(User);
-Comment.belongsTo(User);
+User.hasOne(Role);
+Role.belongsTo(User);
+
 
 
 sequelize.sync({logging: console.log});
