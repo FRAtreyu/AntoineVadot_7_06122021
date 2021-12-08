@@ -18,7 +18,6 @@ exports.getAllUsers = (req, res) => {
 
 exports.getOneUser = (req, res) => {
     let userId=req.params.id
-    console.log('ke suis la')
     Model.User.findOne({
         attributes: ['id','firstname', 'lastname', 'pseudo', 'email'],
         where: {id: userId}
