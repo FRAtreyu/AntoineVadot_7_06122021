@@ -23,8 +23,8 @@ const User = sequelize.define('user', {
         lastname: {type: Sequelize.STRING, allowNull: false},
         email: {type: Sequelize.STRING, allowNull: false, unique: true},
         password: {type: Sequelize.STRING, allowNull: false},
-        pseudo: {type: Sequelize.STRING, allowNull: false},
-        deleted: {type: Sequelize.BOOLEAN, allowNull: false, default: false}
+        pseudo: {type: Sequelize.STRING, allowNull: false, unique: true},
+        deleted: {type: Sequelize.BOOLEAN, default: false}
     },
     {
         tableName: 'user', timestamps: false, underscored: true
@@ -33,7 +33,7 @@ exports.User = User;
 
 const Role = sequelize.define('role', {
         id: {type: Sequelize.INTEGER, primaryKey: true},
-        name: {type: Sequelize.STRING(255), allowNull: false},
+        name: {type: Sequelize.STRING, allowNull: false},
     },
     {tableName: 'role', timestamps: false, underscored: true}
 );
@@ -42,10 +42,9 @@ exports.Role = Role;
 
 const Post = sequelize.define('post', {
         id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
-        user_id: {type: Sequelize.INTEGER, allowNull: false},
         likes: {type: Sequelize.INTEGER, allowNull: false, default: 0},
         dislikes: {type: Sequelize.INTEGER, allowNull: false, default: 0},
-        text: {type: Sequelize.STRING(255), allowNull: false}
+        text: {type: Sequelize.TEXT, allowNull: false}
     },
     {tableName: 'post'});
 exports.Post = Post;
@@ -53,14 +52,15 @@ exports.Post = Post;
 
 const Comment = sequelize.define('comment', {
     id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
-    user_id: {type: Sequelize.INTEGER, allowNull: false},
-    text: {type: Sequelize.STRING(255), allowNull: false}
+    text: {type: Sequelize.TEXT, allowNull: false}
 });
 exports.Comment = Comment;
 
 
 User.belongsTo(Role);
 Comment.belongsTo(Post);
+Post.belongsTo(User);
+Comment.belongsTo(User);
 
 
 sequelize.sync({logging: console.log});

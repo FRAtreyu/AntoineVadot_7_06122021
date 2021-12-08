@@ -1,47 +1,72 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const Model = require('../models/Model')
+const Model = require('../models/Model');
+require('dotenv').config({path: '../config/.env'});
 
 exports.signup = (req, res, next) => {
-    bcrypt.hash(req.body.password, 10)
-        .then(hash =>{
-            const user = Model.User.create({
-                email: req.body.email,
-                firstname: req.body.firstname,
-                lastname: req.body.lastname,
-                pseudo: req.body.pseudo,
-                password: hash
-            });
-            user.save()
-                .then(() => res.status(201).json({message:'Utilisateur créé !'}))
-                .catch(error => res.status(400).json({ error }));
+    let email = req.body.email;
+    let firstname = req.body.firstname;
+    let lastname = req.body.lastname;
+    let pseudo = req.body.pseudo;
+    let password = req.body.password;
+    if (email == null || firstname == null || lastname == null || pseudo == null || password == null) {
+        return res.status(400).json({'error': 'missing parameters'})
+    }
+    ;
+    Model.User.findOne({
+        attributes: ['email'],
+        where: {email: email}
+    })
+        .then(function (userFound) {
+            if (!userFound) {
+                bcrypt.hash(password, 10)
+                    .then(async hash => {
+                        const user = await Model.User.create({
+                            email: email,
+                            firstname: firstname,
+                            lastname: lastname,
+                            pseudo: pseudo,
+                            password: hash,
+                            deleted: false,
+                            role_id: 0
+                        })
+                            .then(() => res.status(201).json({'UserId': user.id}))
+                            .catch(error => res.status(500).json({error}));
+                    })
+                    .catch();
+            } else {
+                return res.status(409).json({'error': 'user already exist'});
+            }
         })
-        .catch();
+        .catch(function (err) {
+            return res.status(500).json({'error': 'unable to verify user'});
+        });
 };
 
 exports.login = (req, res, next) => {
-    User.findOne({email: req.body.email})
-        .then(user => {
+    let email = req.body.email;
+    let password = req.body.password;
+    Model.User.findOne({where: {email: email}})
+        .then(function (user) {
             if (!user) {
-                return res.status(401).json({ error: 'Utilisateur non trouvé !'});
+                return res.status(404).json({error: 'User not found'});
             }
-            bcrypt.compare(req.body.password, user.password)
-                .then(valid => {
-                    if (!valid){
-                        return res.status(401).json({ error: 'Mot de passe incorrect !'});
-                    }
-                    res.status(200).json({
-                        userId: user._id,
-                        token: jwt.sign(
-                            { userId: user._id},
-                            'RANDOM_TOKEN_SECRET',
-                            { expiresIn: '24h'}
+            bcrypt.compare(password, user.password, function (errBycript, resBycript) {
+                if (resBycript) {
+                    return res.status(200).json({
+                        'userId': user.id,
+                        'token': jwt.sign(
+                            {userId: user.id, userRole: user.role_id},
+                            `${process.env.JWT_TOKEN}`,
+                            {expiresIn: '5h'}
                         )
                     });
-                })
-                .catch(error => res.status(500).json({ error }));
+                } else {
+                    return res.status(403).json({'error': 'Invalid password'})
+                }
+            });
         })
-        .catch(error => res.status(500).json({ error }));
+        .catch(error => res.status(500).json({'error': 'Unable to verify User'}));
 };
 
 exports.logout = (req, res, next) => {
