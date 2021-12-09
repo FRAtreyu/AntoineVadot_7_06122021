@@ -38,11 +38,12 @@ exports.signup = (req, res, next) => {
                             pseudo: pseudo,
                             password: hash,
                             deleted: false,
+                            role_id: 0
                         })
                             .then(function (user) {
                                 res.status(201).json({'UserId': user.id})
                             })
-                            .catch(error => res.status(500).json({'error':'create error'}));
+                            .catch(error => res.status(500).json({'error':'failed to create user'}));
                     })
                     .catch();
             } else {

@@ -24,7 +24,8 @@ const User = sequelize.define('user', {
         email: {type: Sequelize.STRING, allowNull: false, unique: true},
         password: {type: Sequelize.STRING, allowNull: false},
         pseudo: {type: Sequelize.STRING, allowNull: false, unique: true},
-        deleted: {type: Sequelize.BOOLEAN, default: false}
+        deleted: {type: Sequelize.BOOLEAN, default: false},
+        role_id: {type: Sequelize.INTEGER, allowNull: false, default: 0}
     },
     {
         tableName: 'user', timestamps: false, underscored: true
@@ -56,10 +57,7 @@ const Comment = sequelize.define('comment', {
 });
 exports.Comment = Comment;
 
-
-User.hasOne(Role);
-Role.belongsTo(User);
-
+User.Role = User.belongsTo(Role);
 
 
 sequelize.sync({logging: console.log});

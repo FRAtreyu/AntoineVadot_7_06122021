@@ -76,25 +76,28 @@ exports.deleteUser = (req, res) => {
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, `${process.env.JWT_TOKEN}`);
     const askingUserId = decodedToken.userId;
-    const askingUser = Model.User.findOne({
-        attributes: ['id'],
-        where: {id: askingUserId},
-        include: Model.Role
-    });
-    if(askingUser.role.name==='admin'){
-        Model.User.findOne({
-            attributes:['id', 'deleted'],
-            where: {id: userId}
-        })
-            .then(user =>{
-                user.set({deleted: true});
-                user.save();
-                return res.status(201).json({message:'user deleted'})
-            })
-            .catch(error=> res.status(500).json({'error':'failed to delete user'}))
-    }else {
-        return res.status(401).json({'error':'must be an admin to do that'})
-    }
+    Model.User.findOne({
+        attributes:['id', 'role_id'],
+        where:{id:askingUserId}
+    })
+        .then(function (userFound) {
+            console.log(userFound);
+            if(userFound.role_id===1){
+                Model.User.findOne({
+                    attributes:['id', 'deleted'],
+                    where: {id: userId}
+                })
+                    .then(user =>{
+                        user.set({deleted: true});
+                        user.save();
+                        return res.status(201).json({message:'user deleted'})
+                    })
+                    .catch(error=> res.status(500).json({'error':'failed to delete user'}))
+            }else {
+                return res.status(401).json({'error':'must be an admin to do that'})
+            }
+    })
+        .catch(error => res.status(500).json({'error':'failed to find user'}))
 
 };
 
