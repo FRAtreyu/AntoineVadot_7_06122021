@@ -43,9 +43,11 @@ exports.Role = Role;
 
 const Post = sequelize.define('post', {
         id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+        user_id: {type: Sequelize.INTEGER, allowNull: false},
         likes: {type: Sequelize.INTEGER, allowNull: false, default: 0},
         dislikes: {type: Sequelize.INTEGER, allowNull: false, default: 0},
-        text: {type: Sequelize.TEXT, allowNull: false}
+        text: {type: Sequelize.TEXT, allowNull: false},
+        user_deleted: {type: Sequelize.BOOLEAN, allowNull:false, default: false}
     },
     {tableName: 'post'});
 exports.Post = Post;
@@ -53,11 +55,23 @@ exports.Post = Post;
 
 const Comment = sequelize.define('comment', {
     id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
-    text: {type: Sequelize.TEXT, allowNull: false}
+    post_id: {type: Sequelize.INTEGER, allowNull: false},
+    user_id: {type: Sequelize.INTEGER, allowNull: false},
+    text: {type: Sequelize.TEXT, allowNull: false},
+    user_deleted: {type: Sequelize.BOOLEAN, allowNull:false, default: false}
 });
 exports.Comment = Comment;
 
-User.Role = User.belongsTo(Role);
+Role.hasMany(User);
+User.belongsTo(Role);
 
+User.hasMany(Post);
+Post.belongsTo(User);
+
+User.hasMany(Comment);
+Comment.belongsTo(User);
+
+Post.hasMany(Comment);
+Comment.belongsTo(Post);
 
 sequelize.sync({logging: console.log});

@@ -90,6 +90,10 @@ exports.deleteUser = (req, res) => {
                     .then(user =>{
                         user.set({deleted: true});
                         user.save();
+                        Model.Post.update({user_deleted: true},
+                            {where:{user_id:userId}});
+                        Model.Comment.update({user_deleted: true},
+                            {where:{user_id:userId}});
                         return res.status(201).json({message:'user deleted'})
                     })
                     .catch(error=> res.status(500).json({'error':'failed to delete user'}))
