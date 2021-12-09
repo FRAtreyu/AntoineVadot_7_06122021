@@ -46,7 +46,7 @@ const Post = sequelize.define('post', {
         user_id: {type: Sequelize.INTEGER, allowNull: false},
         likes: {type: Sequelize.INTEGER, allowNull: false, default: 0},
         dislikes: {type: Sequelize.INTEGER, allowNull: false, default: 0},
-        text: {type: Sequelize.TEXT, allowNull: false},
+        post_message: {type: Sequelize.TEXT, allowNull: false},
         user_deleted: {type: Sequelize.BOOLEAN, allowNull:false, default: false}
     },
     {tableName: 'post'});

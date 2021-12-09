@@ -60,7 +60,7 @@ exports.login = (req, res, next) => {
     let password = req.body.password;
     Model.User.findOne({where: {email: email}})
         .then(function (user) {
-            if (!user) {
+            if (!user||user.deleted) {
                 return res.status(404).json({error: 'User not found'});
             }
             bcrypt.compare(password, user.password, function (errBycript, resBycript) {
@@ -70,7 +70,7 @@ exports.login = (req, res, next) => {
                         'token': jwt.sign(
                             {userId: user.id, userRole: user.role_id},
                             `${process.env.JWT_TOKEN}`,
-                            {expiresIn: '5h'}
+                            {expiresIn: '4h'}
                         )
                     });
                 } else {
