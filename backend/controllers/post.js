@@ -22,7 +22,7 @@ exports.getOnePost = (req, res) => {
     })
         .then(postFound => {
             if (postFound) {
-                if (!postFound.user_deleted) {
+                if (!postFound.user_deleted&&!postFound.deleted) {
                     return res.status(201).json(postFound)
                 } else {
                     return res.status(404).json({'error': 'post not found'})
@@ -35,9 +35,31 @@ exports.getOnePost = (req, res) => {
 };
 
 exports.deleteOnePost = (req, res) => {
-}
+    let postId = req.params.id;
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, `${process.env.JWT_TOKEN}`);
+    const userId= decodedToken.userId;
+    Model.Post.findOne({where:{id:postId}})
+        .then(postFound =>{
+            if(postFound){
+                Model.User.findOne({where:{id:userId}})
+                    .then(userFound =>{
+                        if(userFound.id===postFound.user_id||userFound.role_id===1){
+                            postFound.set({deleted: true});
+                            postFound.save();
+                            return res.status(201).json({message:'post deleted'})
+                        } else {
+                            return res.status(401).json({'error':'Unauthorized request'})
+                        }
+                    })
+                    .catch( error => res.status(404).json({'error':'user not found'}))
+            }else {
+                return res.status(404).json({'error':'post not found'})
+            }
 
-;
+        })
+        .catch( error => res.status(500).json({'error':'failed to fetch post'}))
+};
 
 exports.createPost = (req, res) => {
     const token = req.headers.authorization.split(' ')[1];
@@ -49,7 +71,8 @@ exports.createPost = (req, res) => {
         likes: 0,
         dislikes: 0,
         post_message: postMessage,
-        user_deleted: false
+        user_deleted: false,
+        deleted: false
     })
         .then(function(post){
             return res.status(201).json(post)

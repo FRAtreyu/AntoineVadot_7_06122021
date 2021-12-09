@@ -16,7 +16,7 @@ exports.signup = (req, res, next) => {
     }
 
     if(!EMAIL_REGEX.test(email)){
-        return res.status(400).json({'error': 'Enter valid email adress'})
+        return res.status(400).json({'error': 'Enter valid email address'})
     }
 
     if(!PASSWORD_REGEX.test(password)){

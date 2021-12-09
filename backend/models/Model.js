@@ -47,9 +47,10 @@ const Post = sequelize.define('post', {
         likes: {type: Sequelize.INTEGER, allowNull: false, default: 0},
         dislikes: {type: Sequelize.INTEGER, allowNull: false, default: 0},
         post_message: {type: Sequelize.TEXT, allowNull: false},
-        user_deleted: {type: Sequelize.BOOLEAN, allowNull:false, default: false}
+        user_deleted: {type: Sequelize.BOOLEAN, allowNull:false, default: false},
+        deleted: {type: Sequelize.BOOLEAN, allowNull: false, default:false}
     },
-    {tableName: 'post'});
+    {tableName: 'post', underscored: true});
 exports.Post = Post;
 
 
@@ -58,8 +59,11 @@ const Comment = sequelize.define('comment', {
     post_id: {type: Sequelize.INTEGER, allowNull: false},
     user_id: {type: Sequelize.INTEGER, allowNull: false},
     text: {type: Sequelize.TEXT, allowNull: false},
-    user_deleted: {type: Sequelize.BOOLEAN, allowNull:false, default: false}
-});
+    user_deleted: {type: Sequelize.BOOLEAN, allowNull:false, default: false},
+    deleted: {type: Sequelize.BOOLEAN, allowNull:false, default: false}
+
+},
+    {tableName: 'comment', underscored: true});
 exports.Comment = Comment;
 
 Role.hasMany(User);
