@@ -106,5 +106,9 @@ exports.deleteUser = (req, res) => {
 };
 
 exports.getAllUserPosts = (req, res) => {
+    let userId = req.params.id;
+    Model.User.findOne({where:{id: userId}})
+        .then(user => {
 
+        })
 };

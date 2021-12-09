@@ -44,9 +44,9 @@ exports.Role = Role;
 const Post = sequelize.define('post', {
         id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
         user_id: {type: Sequelize.INTEGER, allowNull: false},
-        likes: {type: Sequelize.INTEGER, allowNull: false, default: 0},
-        dislikes: {type: Sequelize.INTEGER, allowNull: false, default: 0},
         post_message: {type: Sequelize.TEXT, allowNull: false},
+        like: {type: Sequelize.INTEGER, allowNull: false},
+        dislike:{type: Sequelize.INTEGER, allowNull: false},
         user_deleted: {type: Sequelize.BOOLEAN, allowNull:false, default: false},
         deleted: {type: Sequelize.BOOLEAN, allowNull: false, default:false}
     },
@@ -58,13 +58,14 @@ const Comment = sequelize.define('comment', {
     id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
     post_id: {type: Sequelize.INTEGER, allowNull: false},
     user_id: {type: Sequelize.INTEGER, allowNull: false},
-    text: {type: Sequelize.TEXT, allowNull: false},
+    comment_message: {type: Sequelize.TEXT, allowNull: false},
     user_deleted: {type: Sequelize.BOOLEAN, allowNull:false, default: false},
     deleted: {type: Sequelize.BOOLEAN, allowNull:false, default: false}
 
 },
     {tableName: 'comment', underscored: true});
 exports.Comment = Comment;
+
 
 Role.hasMany(User);
 User.belongsTo(Role);

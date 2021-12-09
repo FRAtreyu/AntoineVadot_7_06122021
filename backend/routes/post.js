@@ -6,9 +6,10 @@ const ctrlComment = require('../controllers/comment');
 
 router.post('/', auth,ctrlPost.createPost);
 router.delete('/:id', auth,ctrlPost.deleteOnePost);
-router.post('/:id/comment', auth,ctrlComment.createOneComment);
+router.put('/:id', auth, ctrlPost.setLikes)
+router.post('/:id/comment', auth,ctrlPost.createOneComment);
 router.get('/', auth,ctrlPost.getAllPosts);
 router.get('/:id', auth,ctrlPost.getOnePost);
-router.get('/:id/comment', auth,ctrlComment.getAllComments);
+router.get('/:id/comment', auth,ctrlPost.getAllComments);
 
 module.exports = router;
