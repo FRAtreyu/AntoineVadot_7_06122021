@@ -1,6 +1,6 @@
 const Model = require('../models/Model')
 
-exports.getAllPosts = (req, res, next) => {
+exports.getAllPosts = (req, res) => {
     Model.Post.findAll({
         }
     )
@@ -15,14 +15,21 @@ exports.getAllPosts = (req, res, next) => {
 
 };
 
-exports.getOnePost = (req, res, next) =>{
+exports.getOnePost = (req, res) =>{
+    let postId = req.params.id;
+    Model.Post.findOne({
+        where:{id:postId}
+    })
+        .then(postFound => {
+
+        })
 
 };
 
-exports.deleteOnePost = (req, res, next) => {
+exports.deleteOnePost = (req, res) => {}
 
-};
+;
 
-exports.createPost = (req, res, next) => {
+exports.createPost = (req, res) => {
 
 };
