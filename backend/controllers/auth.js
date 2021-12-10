@@ -43,14 +43,14 @@ exports.signup = (req, res, next) => {
                             .then(function (user) {
                                 res.status(201).json({'UserId': user.id})
                             })
-                            .catch(error => res.status(500).json({'error':'failed to create user'}));
+                            .catch(() => res.status(500).json({'error':'failed to create user'}));
                     })
                     .catch();
             } else {
                 return res.status(409).json({'error': 'user already exist'});
             }
         })
-        .catch(function (err) {
+        .catch(function () {
             return res.status(500).json({'error': 'unable to verify user'});
         });
 };
@@ -78,9 +78,18 @@ exports.login = (req, res) => {
                 }
             });
         })
-        .catch(error => res.status(500).json({'error': 'Unable to verify User'}));
+        .catch(() => res.status(500).json({'error': 'Unable to verify User'}));
 };
 
-exports.logout = (req, res, next) => {
+exports.logout = (req, res) => {
+    req.logout();
+    if (!req.session) {
+        req.session.destroy(function() {
+            res.redirect('/login');
+        });
+    }
+    else {
+        res.redirect('/login');
+    }
 
 };
