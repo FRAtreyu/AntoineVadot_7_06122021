@@ -110,6 +110,7 @@ exports.getAllComments = (req, res) => {
 exports.setLikes = (req, res) => {
     let postId = req.params.id;
     let likeValue = Number(req.body.like_value);
+    if (likeValue !== 1 && likeValue !== -1 && likeValue!==0) return res.status(500).json({'error':'failed to set like'});
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, `${process.env.JWT_TOKEN}`);
     const userId = decodedToken.userId;
