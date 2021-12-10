@@ -55,7 +55,7 @@ exports.signup = (req, res, next) => {
         });
 };
 
-exports.login = (req, res, next) => {
+exports.login = (req, res) => {
     let email = req.body.email;
     let password = req.body.password;
     Model.User.findOne({where: {email: email}})

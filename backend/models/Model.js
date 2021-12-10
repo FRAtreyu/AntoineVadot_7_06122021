@@ -45,8 +45,6 @@ const Post = sequelize.define('post', {
         id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
         user_id: {type: Sequelize.INTEGER, allowNull: false},
         post_message: {type: Sequelize.TEXT, allowNull: false},
-        like: {type: Sequelize.INTEGER, allowNull: false},
-        dislike:{type: Sequelize.INTEGER, allowNull: false},
         user_deleted: {type: Sequelize.BOOLEAN, allowNull:false, default: false},
         deleted: {type: Sequelize.BOOLEAN, allowNull: false, default:false}
     },
@@ -66,6 +64,15 @@ const Comment = sequelize.define('comment', {
     {tableName: 'comment', underscored: true});
 exports.Comment = Comment;
 
+const Like = sequelize.define('like', {
+    id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+    post_id: {type: Sequelize.INTEGER, allowNull: false},
+    user_id: {type: Sequelize.INTEGER, allowNull: false},
+    like_value: {type: Sequelize.INTEGER, allowNull: false, default: 0}
+},
+    {tableName: 'like', underscored: true});
+exports.Like = Like;
+
 
 Role.hasMany(User);
 User.belongsTo(Role);
@@ -78,5 +85,10 @@ Comment.belongsTo(User);
 
 Post.hasMany(Comment);
 Comment.belongsTo(Post);
+
+Post.hasMany(Like);
+Like.belongsTo(Post);
+User.hasMany(Like);
+Like.belongsTo(User);
 
 sequelize.sync({logging: console.log});
