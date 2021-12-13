@@ -52,6 +52,9 @@
 
 export default {
   name: "PostCard",
+  data :() =>({
+
+}),
   components: {}
 }
 </script>

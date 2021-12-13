@@ -70,6 +70,7 @@ export default {
   name: 'Signup',
 
   setup() {
+
     return {
       v$: useVuelidate()
     }
