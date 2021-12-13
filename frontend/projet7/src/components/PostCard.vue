@@ -61,6 +61,7 @@ export default {
   width: 80%;
   display: flex;
   flex-direction: column;
+  padding-top: 15px;
 }
 
 .v-card__actions {
