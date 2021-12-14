@@ -7,10 +7,11 @@
       <div class="v-card__actions">
         <v-card-actions>
           <v-btn
-              class="mx-2"
+              class="mx-2 like__btn"
               fab
               small
               color="primary"
+              @click="like"
           >
             <v-icon>
               mdi-plus
@@ -55,8 +56,19 @@ export default {
   data :() =>({
 
 }),
-  components: {}
+  components: {},
+
+  methods:{
+    //like: function (event){
+      //fetch(//post like api/post/:id/like value 1, userId,
+     // )
+    },
+    //dislike: function (event){
+
+    //}
+ // }
 }
+
 </script>
 
 <style scoped>

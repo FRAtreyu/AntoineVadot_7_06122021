@@ -108,7 +108,6 @@ exports.deleteUser = (req, res) => {
 exports.getAllUserPosts = (req, res) => {
     let userId = req.params.id;
     Model.Post.findAll(
-        {attributes: {exclude: ['userId', 'user_deleted', 'deleted']}},
         {where: {user_id: userId, user_deleted: false, deleted: false}})
         .then(allPosts => {
             return res.status(201).json(allPosts);
