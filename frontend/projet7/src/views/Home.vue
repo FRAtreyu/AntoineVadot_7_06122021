@@ -1,6 +1,7 @@
 <template>
   <div class="home">
     <NewPost></NewPost>
+
     <PostCard></PostCard>
   </div>
 </template>
@@ -9,10 +10,13 @@ import PostCard from "@/components/PostCard";
 import NewPost from "@/components/NewPost";
 
 export default {
-  name: 'Profil',
+  name: 'Home',
   components: {
     PostCard,
     NewPost
+  },
+  methods : {
+
   }
 }
 </script>

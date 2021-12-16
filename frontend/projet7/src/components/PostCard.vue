@@ -1,9 +1,9 @@
 <template>
   <v-lazy class="v-card__post">
     <v-card elevation="6" shaped >
-      <v-card-title>Post User Pseudo</v-card-title>
-      <v-card-subtitle>Post User name</v-card-subtitle>
-      <v-card-text>Post message</v-card-text>
+      <v-card-title>{{user_pseudo}}</v-card-title>
+      <v-card-subtitle>{{user_name}}</v-card-subtitle>
+      <v-card-text>{{ post_message }}</v-card-text>
       <div class="v-card__actions">
         <v-card-actions>
           <v-btn
@@ -54,19 +54,31 @@
 export default {
   name: "PostCard",
   data :() =>({
+    user_pseudo: '',
+    user_name: '',
+    post_message: '',
+    post_id: ''
 
 }),
   components: {},
 
   methods:{
-    //like: function (event){
-      //fetch(//post like api/post/:id/like value 1, userId,
-     // )
-    },
-    //dislike: function (event){
+    PostContent() {
 
-    //}
- // }
+
+    },
+
+
+    commentPost() {
+
+    }
+
+
+},
+
+  computed:{
+
+  }
 }
 
 </script>

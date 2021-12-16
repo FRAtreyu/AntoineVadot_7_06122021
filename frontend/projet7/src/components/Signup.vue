@@ -1,9 +1,10 @@
 <template>
-  <form class="signup__form">
+  <form class="signup__form" id="signupForm" name="signupForm">
     <v-text-field
         v-model="lastname"
         :error-messages="lastnameErrors"
         label="lastname"
+        name="lastname"
         required
         @input="$v.lastname.$touch()"
         @blur="$v.lastname.$touch()"
@@ -12,6 +13,7 @@
         v-model="firstname"
         :error-messages="firstnameErrors"
         label="firstname"
+        name="firstname"
         required
         @input="$v.firstname.$touch()"
         @blur="$v.firstname.$touch()"
@@ -21,6 +23,7 @@
         :error-messages="pseudoErrors"
         :counter="10"
         label="pseudo"
+        name="pseudo"
         required
         @input="$v.pseudo.$touch()"
         @blur="$v.pseudo.$touch()"
@@ -29,6 +32,7 @@
         v-model="email"
         :error-messages="emailErrors"
         label="E-mail"
+        name="email"
         required
         @input="$v.email.$touch()"
         @blur="$v.email.$touch()"
@@ -37,6 +41,7 @@
         v-model="password"
         :error-messages="passwordErrors"
         label="password"
+        name="password"
         required
         @input="$v.password.$touch()"
         @blur="$v.password.$touch()"
@@ -44,7 +49,7 @@
 
     <v-btn
         class="mr-4"
-        @click="submit"
+        @click="submit()"
     >
       submit
     </v-btn>
@@ -133,7 +138,30 @@ export default {
 
   methods: {
     submit() {
-      this.$v.$touch()
+      (async () => {
+        const rawResponse = await fetch('http://localhost:4200/api/auth/signup/',
+          {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              email: this.email,
+              lastname: this.lastname,
+              firstname: this.firstname,
+              password: this.password,
+              pseudo: this.pseudo
+            })
+          })
+
+        const content = await rawResponse.json();
+
+        console.log(content);
+
+      })();
+
+
     },
     clear() {
       this.$v.$reset()

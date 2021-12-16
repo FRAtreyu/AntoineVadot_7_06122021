@@ -36,7 +36,7 @@
                 <router-link to="/">Accueil</router-link>
               </v-btn>
               <v-btn class="menu__btn">
-                <router-link to="/profile">Profil</router-link>
+                <router-link to="/login">Login</router-link>
               </v-btn>
               <v-btn class="menu__btn">
                 <router-link to="/signup">S'inscrire</router-link>
