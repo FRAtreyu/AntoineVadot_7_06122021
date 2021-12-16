@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Model = require('../models/Model');
-const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ ;
+const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const PASSWORD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$/;
 require('dotenv').config({path: '../config/.env'});
 
@@ -15,11 +15,11 @@ exports.signup = (req, res, next) => {
         return res.status(400).json({'error': 'missing parameters'})
     }
 
-    if(!EMAIL_REGEX.test(email)){
+    if (!EMAIL_REGEX.test(email)) {
         return res.status(400).json({'error': 'Enter valid email address'})
     }
 
-    if(!PASSWORD_REGEX.test(password)){
+    if (!PASSWORD_REGEX.test(password)) {
         return res.status(400).json({'error': 'Password must be between 4 and 8 characters and must include at least one upper case letter, one lower case letter, and one numeric digit.'})
     }
 
@@ -43,7 +43,7 @@ exports.signup = (req, res, next) => {
                             .then(function (user) {
                                 res.status(201).json({'UserId': user.id})
                             })
-                            .catch(() => res.status(500).json({'error':'failed to create user'}));
+                            .catch(() => res.status(500).json({'error': 'failed to create user'}));
                     })
                     .catch();
             } else {
@@ -60,7 +60,7 @@ exports.login = (req, res) => {
     let password = req.body.password;
     Model.User.findOne({where: {email: email}})
         .then(function (user) {
-            if (!user||user.deleted) {
+            if (!user || user.deleted) {
                 return res.status(404).json({error: 'User not found'});
             }
             bcrypt.compare(password, user.password, function (errBycript, resBycript) {
@@ -84,11 +84,10 @@ exports.login = (req, res) => {
 exports.logout = (req, res) => {
     req.logout();
     if (!req.session) {
-        req.session.destroy(function() {
+        req.session.destroy(function () {
             res.redirect('/login');
         });
-    }
-    else {
+    } else {
         res.redirect('/login');
     }
 

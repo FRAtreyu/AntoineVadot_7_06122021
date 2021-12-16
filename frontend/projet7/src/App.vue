@@ -30,16 +30,19 @@
     <v-main class="grey lighten-3">
       <v-container>
         <v-row>
-          <v-col cols="2" >
-            <v-sheet rounded="lg" class="menu grey lighten-3" >
+          <v-col cols="2">
+            <v-sheet rounded="lg" class="menu grey lighten-3">
               <v-btn class="menu__btn">
                 <router-link to="/">Accueil</router-link>
               </v-btn>
               <v-btn class="menu__btn">
-                <router-link to="/login">Login</router-link>
+                <router-link to="/login">Se connecter</router-link>
               </v-btn>
               <v-btn class="menu__btn">
                 <router-link to="/signup">S'inscrire</router-link>
+              </v-btn>
+              <v-btn class="menu__btn">
+                <router-link to="/logout">Se déconnecter</router-link>
               </v-btn>
             </v-sheet>
           </v-col>
@@ -61,25 +64,16 @@
 <script>
 
 export default {
-  data: () => ({
-    links: [
-      'Accueil',
-      'Profil',
-      'Déconnexion',
-    ],
-  }),
-  components:{
-
-  }
+  components: {}
 }
 </script>
 <style lang="scss">
-.menu{
+.menu {
   display: flex;
   flex-direction: column;
 }
 
-.menu__btn{
+.menu__btn {
   margin-bottom: 25px;
 }
 
