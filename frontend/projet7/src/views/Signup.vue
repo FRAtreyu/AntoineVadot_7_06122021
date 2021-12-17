@@ -156,9 +156,7 @@ export default {
           })
 
         const content = await rawResponse.json();
-
         console.log(content);
-
       })();
 
 

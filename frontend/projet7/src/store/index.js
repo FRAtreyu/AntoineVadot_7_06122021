@@ -15,6 +15,13 @@ export default new Vuex.Store({
            state.userConnected = false
         }
     },
-    actions: {},
+    actions: {
+        connectUser({commit}) {
+            commit('CONNECT_USER')
+        },
+        disconnectUser({commit}) {
+            commit('DISCONNECT_USER')
+        }
+    },
     modules: {}
 })

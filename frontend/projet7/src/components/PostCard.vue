@@ -1,8 +1,8 @@
 <template>
   <v-lazy class="v-card__post">
-    <v-card elevation="6" shaped >
-      <v-card-title>{{user_pseudo}}</v-card-title>
-      <v-card-subtitle>{{user_name}}</v-card-subtitle>
+    <v-card elevation="6" shaped>
+      <v-card-title>{{ user_pseudo }}</v-card-title>
+      <v-card-subtitle>{{ user_name }}</v-card-subtitle>
       <v-card-text>{{ post_message }}</v-card-text>
       <div class="v-card__actions">
         <v-card-actions>
@@ -50,36 +50,47 @@
 
 <script>
 
-
 export default {
   name: "PostCard",
-  data :() =>({
-    user_pseudo: '',
-    user_name: '',
-    post_message: '',
-    post_id: ''
-
-}),
-  components: {},
-
-  methods:{
-    PostContent() {
-
-
+  props: ['user_id','post_message'],
+  data: () => ({
+    user_name: 'user_name',
+    user_pseudo: 'user_pseudo',
+    userId: ''
+  }),
+  computed: {
+    getUserId() {
+     return  Number(this.user_id);
+    }
+  },
+  methods: {
+    setUserId () {
+      this.userId = this.getUserId;
     },
-
-
-    commentPost() {
+    getUserInfos (fetchUrl) {
+      return fetch(fetchUrl,{
+        method: 'GET',
+        headers: {
+          'authorization' : 'bearer '+sessionStorage.getItem('token')
+        }
+      }).then( (res) => res.json())
+    },
+    async setUserInfos() {
+      let userId = this.getUserId;
+      let fetchUrl = 'http://localhost:4200/api/user/'+userId;
+      let userInfos = await this.getUserInfos(fetchUrl);
+      console.log(userInfos);
+      this.user_name= userInfos.firstname+' '+userInfos.lastname;
+      this.user_pseudo=userInfos.pseudo;
 
     }
 
-
-},
-
-  computed:{
-
+  },
+  beforeMount() {
+    this.setUserInfos();
   }
 }
+
 
 </script>
 

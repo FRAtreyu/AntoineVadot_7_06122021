@@ -21,6 +21,7 @@
 export default {
   name: "NewPost",
   data: () => ({
+    form:'',
     rules: [v => v.length <= 255 || 'Max 255 characters'],
   }),
 

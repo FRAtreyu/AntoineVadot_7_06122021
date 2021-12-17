@@ -32,17 +32,17 @@
         <v-row>
           <v-col cols="2">
             <v-sheet rounded="lg" class="menu grey lighten-3">
-              <v-btn class="menu__btn">
-                <router-link to="/">Accueil</router-link>
+              <v-btn class="menu__btn" v-if="userConnected">
+                <router-link to="/post">Mur</router-link>
               </v-btn>
-              <v-btn class="menu__btn">
-                <router-link to="/login">Se connecter</router-link>
+              <v-btn class="menu__btn" v-if="!userConnected">
+                <router-link to="/">Se connecter</router-link>
               </v-btn>
-              <v-btn class="menu__btn">
+              <v-btn class="menu__btn" v-if="!userConnected">
                 <router-link to="/signup">S'inscrire</router-link>
               </v-btn>
-              <v-btn class="menu__btn">
-                <router-link to="/logout">Se déconnecter</router-link>
+              <v-btn class="menu__btn" v-if="userConnected" @click="disconnect">
+                Se déconnecter
               </v-btn>
             </v-sheet>
           </v-col>
@@ -62,9 +62,21 @@
 </template>
 
 <script>
+import {mapState, mapActions} from 'vuex'
 
 export default {
-  components: {}
+  components: {},
+  computed: {
+  ...mapState(['userConnected'])
+  },
+  methods:{
+    ...mapActions(['disconnectUser']),
+    disconnect() {
+      this.disconnectUser();
+      this.$router.push({name:'Login'})
+    }
+
+  }
 }
 </script>
 <style lang="scss">
@@ -75,6 +87,12 @@ export default {
 
 .menu__btn {
   margin-bottom: 25px;
+  text-decoration: none;
+}
+
+a {
+  text-decoration: none;
+  color: black !important;
 }
 
 
