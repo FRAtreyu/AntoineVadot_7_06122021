@@ -1,10 +1,11 @@
 <template>
-  <div class="home">
-    <NewPost></NewPost>
+  <div class="home" :key="div_key">
+    <NewPost @new-post="changeKey"></NewPost>
     <ul v-if="postList.length!==0">
-      <li v-for="post in postList" :key="post.id">
+      <li v-for="post in postList" :key="post.id" >
         <PostCard :user_id="post.user_id"
                   :post_message="post.post_message"
+                  :post_id="post.id"
         ></PostCard>
       </li>
     </ul>
@@ -17,7 +18,8 @@ import NewPost from "@/components/NewPost";
 export default {
   name: 'Post',
   data: () => ({
-    postList: []
+    postList: [],
+    div_key:0
   }),
   components: {
     PostCard,
@@ -37,8 +39,14 @@ export default {
     },
 
     async setPostList() {
-      this.postList = await this.getAllPosts();
+      let list = await this.getAllPosts();
+      this.postList = list.reverse();
       console.log(this.postList);
+    },
+
+    changeKey() {
+      this.setPostList();
+      this.div_key ++;
     }
 
   },
