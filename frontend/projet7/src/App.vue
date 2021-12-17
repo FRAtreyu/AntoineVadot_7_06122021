@@ -35,15 +35,19 @@
               <v-btn class="menu__btn" v-if="userConnected">
                 <router-link to="/post">Mur</router-link>
               </v-btn>
+              <v-btn class="menu__btn" v-if="userConnected">
+                <router-link to="/profile">Profil</router-link>
+              </v-btn>
+              <v-btn class="menu__btn" v-if="userConnected" @click="disconnect">
+                Se déconnecter
+              </v-btn>
               <v-btn class="menu__btn" v-if="!userConnected">
                 <router-link to="/">Se connecter</router-link>
               </v-btn>
               <v-btn class="menu__btn" v-if="!userConnected">
                 <router-link to="/signup">S'inscrire</router-link>
               </v-btn>
-              <v-btn class="menu__btn" v-if="userConnected" @click="disconnect">
-                Se déconnecter
-              </v-btn>
+
             </v-sheet>
           </v-col>
 
@@ -62,20 +66,31 @@
 </template>
 
 <script>
-import {mapState, mapActions} from 'vuex'
 
 export default {
+  data: () => ({
+    userConnected: false
+  }),
+
   components: {},
   computed: {
-  ...mapState(['userConnected'])
   },
   methods:{
-    ...mapActions(['disconnectUser']),
+    setUserConnected() {
+      if(localStorage.getItem('token')) this.userConnected = true;
+    },
     disconnect() {
-      this.disconnectUser();
+      this.userConnected = false;
+      localStorage.clear();
       this.$router.push({name:'Login'})
+    },
+    forceUpdate () {
+      location.reload()
     }
 
+  },
+  beforeMount() {
+    this.setUserConnected()
   }
 }
 </script>

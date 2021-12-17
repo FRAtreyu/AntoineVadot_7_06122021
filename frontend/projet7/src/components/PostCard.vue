@@ -71,7 +71,7 @@ export default {
       return fetch(fetchUrl,{
         method: 'GET',
         headers: {
-          'authorization' : 'bearer '+sessionStorage.getItem('token')
+          'authorization' : 'bearer '+localStorage.getItem('token')
         }
       }).then( (res) => res.json())
     },

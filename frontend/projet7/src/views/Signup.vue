@@ -3,7 +3,7 @@
     <v-text-field
         v-model="lastname"
         :error-messages="lastnameErrors"
-        label="lastname"
+        label="Nom"
         name="lastname"
         required
         @input="$v.lastname.$touch()"
@@ -12,7 +12,7 @@
     <v-text-field
         v-model="firstname"
         :error-messages="firstnameErrors"
-        label="firstname"
+        label="Prénom"
         name="firstname"
         required
         @input="$v.firstname.$touch()"
@@ -40,7 +40,7 @@
     <v-text-field
         v-model="password"
         :error-messages="passwordErrors"
-        label="password"
+        label="mot de passe"
         name="password"
         required
         @input="$v.password.$touch()"
@@ -67,7 +67,7 @@ import Vue from 'vue'
 import VueCompositionAPI from '@vue/composition-api'
 import useVuelidate from "@vuelidate/core";
 
-const passwordRegex = helpers.regex('passwordRegex',/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$/);
+const passwordRegex = helpers.regex('passwordRegex', /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$/);
 
 Vue.use(VueCompositionAPI)
 
@@ -140,23 +140,23 @@ export default {
     submit() {
       (async () => {
         const rawResponse = await fetch('http://localhost:4200/api/auth/signup/',
-          {
-            method: 'POST',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              email: this.email,
-              lastname: this.lastname,
-              firstname: this.firstname,
-              password: this.password,
-              pseudo: this.pseudo
+            {
+              method: 'POST',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                email: this.email,
+                lastname: this.lastname,
+                firstname: this.firstname,
+                password: this.password,
+                pseudo: this.pseudo
+              })
             })
-          })
+        location.assign('/');
+        return rawResponse.json();
 
-        const content = await rawResponse.json();
-        console.log(content);
       })();
 
 
