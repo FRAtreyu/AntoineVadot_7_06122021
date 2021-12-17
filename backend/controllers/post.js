@@ -132,3 +132,21 @@ exports.setLikes = (req, res) => {
         })
         .catch(() => res.status(500).json({'error': 'failed to set like'}))
 };
+
+exports.getPostLikes = (req, res) => {
+    let postId = req.params.id
+    Model.Like.findAll({where:{post_id: postId, like_value: 1}})
+        .then(likes => {
+            return res.status(201).json(likes)
+        })
+        .catch( () => res.status(500).json({'error':'failed to fetch likes'}))
+};
+
+exports.getPostDislikes = (req, res) => {
+    let postId = req.params.id
+    Model.Like.findAll({where:{post_id: postId, like_value: -1}})
+        .then(dislikes => {
+            return res.status(201).json(dislikes)
+        })
+        .catch( () => res.status(500).json({'error':'failed to fetch dislikes'}))
+}

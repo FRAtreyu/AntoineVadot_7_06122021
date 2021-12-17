@@ -52,7 +52,7 @@
 
 export default {
   name: "PostCard",
-  props: ['user_id','post_message'],
+  props: ['user_id','post_message', 'post_id'],
   data: () => ({
     user_name: 'user_name',
     user_pseudo: 'user_pseudo',
@@ -82,6 +82,14 @@ export default {
       console.log(userInfos);
       this.user_name= userInfos.firstname+' '+userInfos.lastname;
       this.user_pseudo=userInfos.pseudo;
+
+    },
+    getPostLikes() {
+
+
+    },
+
+    like() {
 
     }
 
