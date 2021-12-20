@@ -1,58 +1,63 @@
 <template>
   <div class="profile">
-    <div class="user__info">{{user_name}}</div>
-    <div class="user__info">{{user_pseudo}}</div>
-    <div class="user__info">{{ user_mail }}</div>
+    <div class="user__info">{{ userInfo.lastname }}</div>
+    <div class="user__info">{{ userInfo.pseudo }}</div>
+    <div class="user__info">{{ userInfo.email }}</div>
     <ul class="user__posts">
+      <PostCard v-for="post in postList" v-bind:post="post" :key="post.id"
+      ></PostCard>
     </ul>
   </div>
 </template>
 
 <script>
-
+import PostCard from "@/components/PostCard";
 
 export default {
   name: "Profile",
+  components: {PostCard},
   props: ['id'],
   data: () => ({
-    user_name: '',
-    user_pseudo: '',
-    user_mail: ''
+    userInfo: {},
+    postList: []
   }),
   methods: {
     getUserInfos() {
-        return fetch(`http://localhost:4200/api/user/${this.id}`,
-            {
-              method: 'GET',
-              headers: {
-                'authorization': 'bearer ' + localStorage.getItem('token')
-              }
-            })
+      return fetch(`http://localhost:4200/api/user/${this.id}`,
+          {
+            method: 'GET',
+            headers: {
+              'authorization': 'bearer ' + localStorage.getItem('token')
+            }
+          }).then(res => res.json())
     },
-    async setUserInfo(){
-      let userInfo = await this.getUserInfos();
-      console.log(userInfo);
-      this.user_name=userInfo.firstname+' '+userInfo.lastname;
-      this.user_pseudo= userInfo.pseudo;
-      this.user_mail=userInfo.email
+
+    async setUserInfos() {
+      this.userInfo = await this.getUserInfos()
+      console.log(this.userInfo)
     },
 
     getUserPosts() {
-      (async () => {
-        return await fetch(`http://localhost:4200/api/user/${this.id}/post`,
+        return  fetch(`http://localhost:4200/api/user/${this.id}/post`,
             {
               method: 'GET',
               headers: {
                 'authorization': 'bearer ' + localStorage.getItem('token')
               }
-            })
-      })();
+            }).then(res => res.json())
+      },
+    async setUserPosts() {
+      let list = await this.getUserPosts();
+      this.postList = list.reverse();
+      console.log(this.postList)
     }
   },
-  mounted() {
-    this.setUserInfo();
+  created() {
+    this.setUserInfos()
+    this.setUserPosts()
   }
-}
+  }
+
 </script>
 
 <style scoped>
