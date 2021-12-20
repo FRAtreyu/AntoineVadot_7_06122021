@@ -25,7 +25,7 @@
               </router-link>
 
 
-              <router-link to="/profile">
+              <router-link :to="{name: 'Profile', params: {id: userId}}">
                 <v-btn class="menu__btn" v-if="userConnected">Profil</v-btn>
               </router-link>
 
@@ -61,7 +61,8 @@
 
 export default {
   data: () => ({
-    userConnected: false
+    userConnected: false,
+    userId: localStorage.getItem('userId'),
   }),
 
   components: {},

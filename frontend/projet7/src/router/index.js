@@ -14,9 +14,10 @@ const routes = [
     component: Post
   },
   {
-    path: '/profile',
+    path: '/profile/:id',
     name: 'Profile',
-    component: Profile
+    props: true,
+    component: Profile,
   },
   {
     path: '/signup',

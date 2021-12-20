@@ -5,7 +5,7 @@
       <v-card-subtitle>{{ post.user.pseudo }}</v-card-subtitle>
       <v-card-text>{{ post.post_message }}</v-card-text>
       <div class="v-card__actions">
-        <v-card-actions class="actions__icons" v-if="user_id!==post.user_id">
+        <v-card-actions class="actions__icons" v-if="userId!==post.user_id">
           <v-btn
               class="mx-2 like__btn"
               fab
@@ -19,7 +19,7 @@
           </v-btn>
           <div class="likes">{{ countLikes }}</div>
         </v-card-actions>
-        <v-card-actions class="actions__icons" v-if="user_id!==post.user_id">
+        <v-card-actions class="actions__icons" v-if="userId!==post.user_id">
           <v-btn
               class="mx-2"
               fab
@@ -70,7 +70,7 @@ export default {
   name: "PostCard",
   props: ['post'],
   data: () => ({
-    user_id: localStorage.getItem('userId'),
+    userId: localStorage.getItem('userId'),
     user_role: localStorage.getItem('role'),
     likes:'',
     dislikes:'',
