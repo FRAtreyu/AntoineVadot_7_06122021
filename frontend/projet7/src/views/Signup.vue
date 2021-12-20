@@ -48,12 +48,14 @@
     ></v-text-field>
 
     <v-btn
-        class="mr-4"
+        class="mr-4 form__btn"
         @click="submit()"
+
     >
       submit
     </v-btn>
-    <v-btn @click="clear">
+    <v-btn @click="clear"
+           class="form__btn">
       clear
     </v-btn>
   </form>
@@ -179,5 +181,9 @@ export default {
   width: 80%;
   margin-left: 10%;
   padding-top: 5%;
+}
+
+.form__btn{
+  margin-bottom: 15px;
 }
 </style>

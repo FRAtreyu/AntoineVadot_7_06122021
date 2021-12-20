@@ -4,6 +4,7 @@
     <ul v-if="postList.length!==0">
         <PostCard v-for="post in postList" v-bind:post="post" :key="post.id"
                   @delete-post="changeKey"
+                  @like-update="changeKey"
         ></PostCard>
     </ul>
   </div>
@@ -66,6 +67,7 @@ export default {
 ul {
   list-style-type: none;
   min-width: 100%;
+  padding: 0;
   display: flex;
   flex-direction: column;
   align-items: center;

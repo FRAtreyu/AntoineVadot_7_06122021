@@ -53,5 +53,6 @@ export default {
 <style scoped>
 .newPostText {
   width: 80%;
+  max-width: 640px;
 }
 </style>

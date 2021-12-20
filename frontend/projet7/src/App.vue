@@ -5,49 +5,41 @@
         color="white"
         flat class="v-app-bar"
     >
-      <v-container class="py-0 fill-height">
-        <v-avatar>
+      <v-container class="py-0 fill-height logo">
           <img
-              src="https://cdn.vuetifyjs.com/images/john.jpg"
-              alt="John"
+              src="./assets/icon-left-font-monochrome-black.svg"
+              alt="Groupomania logo"
+              class="logo"
           >
-        </v-avatar>
-        <v-spacer></v-spacer>
-
-        <v-responsive max-width="260">
-          <v-text-field
-              dense
-              flat
-              hide-details
-              rounded
-              solo-inverted
-              placeholder="User search"
-          ></v-text-field>
-        </v-responsive>
       </v-container>
     </v-app-bar>
 
     <v-main class="grey lighten-3">
       <v-container>
         <v-row>
-          <v-col cols="2">
+          <v-col cols="3">
             <v-sheet rounded="lg" class="menu grey lighten-3">
-              <v-btn class="menu__btn" v-if="userConnected">
-                <router-link to="/post">Mur</router-link>
-              </v-btn>
-              <v-btn class="menu__btn" v-if="userConnected">
-                <router-link to="/profile">Profil</router-link>
-              </v-btn>
+
+              <router-link to="/post">
+                <v-btn class="menu__btn" v-if="userConnected">Mur</v-btn>
+              </router-link>
+
+
+              <router-link to="/profile">
+                <v-btn class="menu__btn" v-if="userConnected">Profil</v-btn>
+              </router-link>
+
               <v-btn class="menu__btn" v-if="userConnected" @click="disconnect">
-                Se déconnecter
+                <v-icon>mdi-power</v-icon>
               </v-btn>
-              <v-btn class="menu__btn" v-if="!userConnected">
-                <router-link to="/">Se connecter</router-link>
-              </v-btn>
+
+              <router-link to="/">
+                <v-btn class="menu__btn" v-if="!userConnected">Se connecter</v-btn>
+              </router-link>
+
               <v-btn class="menu__btn" v-if="!userConnected">
                 <router-link to="/signup">S'inscrire</router-link>
               </v-btn>
-
             </v-sheet>
           </v-col>
 
@@ -73,18 +65,17 @@ export default {
   }),
 
   components: {},
-  computed: {
-  },
-  methods:{
+  computed: {},
+  methods: {
     setUserConnected() {
-      if(localStorage.getItem('token')) this.userConnected = true;
+      if (localStorage.getItem('token')) this.userConnected = true;
     },
     disconnect() {
       this.userConnected = false;
       localStorage.clear();
-      this.$router.push({name:'Login'})
+      this.$router.push({name: 'Login'})
     },
-    forceUpdate () {
+    forceUpdate() {
       location.reload()
     }
 
@@ -95,19 +86,39 @@ export default {
 }
 </script>
 <style lang="scss">
-.menu {
+.row {
   display: flex;
   flex-direction: column;
 }
 
+.col-3 {
+  display: flex;
+  flex-direction: row;
+}
+
+.menu {
+  display: flex;
+  flex-direction: row;
+}
+
 .menu__btn {
-  margin-bottom: 25px;
+  margin: 5px;
   text-decoration: none;
+  display: flex;
 }
 
 a {
   text-decoration: none;
   color: black !important;
+}
+
+.logo{
+  max-height: 100%;
+  max-width: 300px;
+}
+
+.v-container {
+  padding: 0;
 }
 
 
