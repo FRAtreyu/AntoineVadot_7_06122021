@@ -2,7 +2,7 @@ const Model = require('../models/Model')
 const jwt = require('jsonwebtoken');
 
 exports.getAllPosts = (req, res) => {
-    Model.Post.findAll({where: {user_deleted: false, deleted: false}}
+    Model.Post.findAll({where: {user_deleted: false, deleted: false}, include: [Model.User, Model.Like, Model.Comment]}
     )
         .then(allPosts => {
             if (allPosts) {
@@ -18,7 +18,8 @@ exports.getAllPosts = (req, res) => {
 exports.getOnePost = (req, res) => {
     let postId = req.params.id;
     Model.Post.findOne({
-        where: {id: postId, user_deleted: false, deleted: false}
+        where: {id: postId, user_deleted: false, deleted: false},
+        include: [Model.User, Model.Like, Model.Comment]
     })
         .then(postFound => {
             if (postFound) {
@@ -110,7 +111,7 @@ exports.getAllComments = (req, res) => {
 exports.setLikes = (req, res) => {
     let postId = req.params.id;
     let likeValue = Number(req.body.like_value);
-    if (likeValue !== 1 && likeValue !== -1 && likeValue!==0) return res.status(500).json({'error':'failed to set like'});
+    if (likeValue !== 1 && likeValue !== -1) return res.status(500).json({'error':'failed to set like'});
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, `${process.env.JWT_TOKEN}`);
     const userId = decodedToken.userId;
@@ -128,25 +129,10 @@ exports.setLikes = (req, res) => {
                 like.save();
                 return res.status(201).json(like);
             }
-            return res.status(400).json({'error': 'user already voted'})
+            like.set({like_value: 0});
+            like.save();
+            return res.status(201).json(like);
+
         })
         .catch(() => res.status(500).json({'error': 'failed to set like'}))
 };
-
-exports.getPostLikes = (req, res) => {
-    let postId = req.params.id
-    Model.Like.findAll({where:{post_id: postId, like_value: 1}})
-        .then(likes => {
-            return res.status(201).json(likes)
-        })
-        .catch( () => res.status(500).json({'error':'failed to fetch likes'}))
-};
-
-exports.getPostDislikes = (req, res) => {
-    let postId = req.params.id
-    Model.Like.findAll({where:{post_id: postId, like_value: -1}})
-        .then(dislikes => {
-            return res.status(201).json(dislikes)
-        })
-        .catch( () => res.status(500).json({'error':'failed to fetch dislikes'}))
-}

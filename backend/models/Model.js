@@ -88,6 +88,7 @@ Comment.belongsTo(Post);
 
 Post.hasMany(Like);
 Like.belongsTo(Post);
+
 User.hasMany(Like);
 Like.belongsTo(User);
 

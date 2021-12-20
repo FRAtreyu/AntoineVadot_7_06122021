@@ -10,8 +10,6 @@ router.post('/:id/like', auth, ctrlPost.setLikes)
 router.post('/:id/comment', auth,ctrlPost.createOneComment);
 router.get('/', auth,ctrlPost.getAllPosts);
 router.get('/:id', auth,ctrlPost.getOnePost);
-router.get('/:id/like', auth,ctrlPost.getPostLikes);
-router.get('/:id/dislike', auth,ctrlPost.getPostDislikes);
 router.get('/:id/comment', auth,ctrlPost.getAllComments);
 
 module.exports = router;

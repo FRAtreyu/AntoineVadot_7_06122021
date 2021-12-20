@@ -2,13 +2,9 @@
   <div class="home" :key="div_key">
     <NewPost @new-post="changeKey"></NewPost>
     <ul v-if="postList.length!==0">
-      <li v-for="post in postList" :key="post.id" >
-        <PostCard :user_id="post.user_id"
-                  :post_message="post.post_message"
-                  :post_id="post.id"
+        <PostCard v-for="post in postList" v-bind:post="post" :key="post.id"
                   @delete-post="changeKey"
         ></PostCard>
-      </li>
     </ul>
   </div>
 </template>
@@ -42,7 +38,7 @@ export default {
     async setPostList() {
       let list = await this.getAllPosts();
       this.postList = list.reverse();
-      console.log(this.postList);
+      console.log(this.postList[0])
     },
 
     changeKey() {

@@ -1,9 +1,9 @@
 <template>
   <v-lazy class="v-card__post">
     <v-card elevation="6" shaped>
-      <v-card-title>{{ user_pseudo }}</v-card-title>
-      <v-card-subtitle>{{ user_name }}</v-card-subtitle>
-      <v-card-text>{{ post_message }}</v-card-text>
+      <v-card-title>{{ post.user.lastname }}</v-card-title>
+      <v-card-subtitle>{{ post.user.pseudo }}</v-card-subtitle>
+      <v-card-text>{{ post.post_message }}</v-card-text>
       <div class="v-card__actions">
         <v-card-actions>
           <v-btn
@@ -11,7 +11,6 @@
               fab
               small
               color="primary"
-              @click="like"
           >
             <v-icon>
               mdi-plus
@@ -65,42 +64,18 @@
 
 export default {
   name: "PostCard",
-  props: ['user_id','post_message', 'post_id'],
+  props: ['post'],
   data: () => ({
-    user_name: 'user_name',
-    user_pseudo: 'user_pseudo',
     userId: '',
-    user_role: localStorage.getItem('role')
+    user_role: localStorage.getItem('role'),
   }),
   computed: {
-    getUserId() {
-     return  Number(this.user_id);
-    }
+
   },
   methods: {
-    setUserId () {
-      this.userId = this.getUserId;
-    },
-    getUserInfos (fetchUrl) {
-      return fetch(fetchUrl,{
-        method: 'GET',
-        headers: {
-          'authorization' : 'bearer '+localStorage.getItem('token')
-        }
-      }).then( (res) => res.json())
-    },
-    async setUserInfos() {
-      let userId = this.getUserId;
-      let fetchUrl = 'http://localhost:4200/api/user/'+userId;
-      let userInfos = await this.getUserInfos(fetchUrl);
-      console.log(userInfos);
-      this.user_name= userInfos.firstname+' '+userInfos.lastname;
-      this.user_pseudo=userInfos.pseudo;
-
-    },
     deletePost () {
       ( async () => {
-        const deleteResponse = await fetch(`http://localhost:4200/api/post/${this.post_id}`,
+        const deleteResponse = await fetch(`http://localhost:4200/api/post/${this.post.id}`,
             {
               method: 'DELETE',
               headers:{
@@ -115,18 +90,10 @@ export default {
 
     },
 
-    getPostLikes() {
-
-
-    },
-
-    like() {
-
-    }
 
   },
-  beforeMount() {
-    this.setUserInfos();
+  mounted() {
+
   }
 }
 
