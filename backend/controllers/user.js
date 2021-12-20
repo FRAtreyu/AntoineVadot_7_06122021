@@ -78,11 +78,12 @@ exports.deleteUser = (req, res) => {
     const askingUserId = decodedToken.userId;
     Model.User.findOne({
         attributes: ['id', 'role_id'],
-        where: {id: askingUserId}
+        where: {id: askingUserId},
+        include: Model.Role
     })
         .then(function (userFound) {
             console.log(userFound);
-            if (userFound.role_id === 1) {
+            if (userFound.role.name === 'admin') {
                 Model.User.findOne({
                     attributes: ['id', 'deleted'],
                     where: {id: userId}

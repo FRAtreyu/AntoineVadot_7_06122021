@@ -39,6 +39,7 @@ export default {
         } else alert('Mot de passe ou identifiant incorrect')
         localStorage.setItem('userId', content.userId);
         localStorage.setItem('token', content.token);
+        localStorage.setItem('role', content.role)
       })();
     }
   }

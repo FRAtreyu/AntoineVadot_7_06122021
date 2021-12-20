@@ -38,9 +38,9 @@ exports.deleteOnePost = (req, res) => {
     Model.Post.findOne({where: {id: postId}})
         .then(postFound => {
             if (postFound) {
-                Model.User.findOne({where: {id: userId}})
+                Model.User.findOne({where: {id: userId}, include: Model.Role})
                     .then(userFound => {
-                        if (userFound.id === postFound.user_id || userFound.role_id === 1) {
+                        if (userFound.role.name === 'admin') {
                             postFound.set({deleted: true});
                             postFound.save();
                             return res.status(201).json({message: 'post deleted'})

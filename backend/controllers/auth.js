@@ -58,7 +58,7 @@ exports.signup = (req, res, next) => {
 exports.login = (req, res) => {
     let email = req.body.email;
     let password = req.body.password;
-    Model.User.findOne({where: {email: email}})
+    Model.User.findOne({where: {email: email}, include: Model.Role})
         .then(function (user) {
             if (!user || user.deleted) {
                 return res.status(404).json({error: 'User not found'});
@@ -71,7 +71,8 @@ exports.login = (req, res) => {
                             {userId: user.id, userRole: user.role_id},
                             `${process.env.JWT_TOKEN}`,
                             {expiresIn: '4h'}
-                        )
+                        ),
+                        'role': user.role.name
                     });
                 } else {
                     return res.status(403).json({'error': 'Invalid password'})

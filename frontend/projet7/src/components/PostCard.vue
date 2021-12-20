@@ -43,6 +43,19 @@
             </v-icon>
           </v-btn>
         </v-card-actions>
+        <v-card-actions v-if="user_role==='admin'">
+          <v-btn
+              class="mx-2 delete"
+              fab
+              small
+              color="primary"
+              @click="deletePost"
+          >
+            <v-icon>
+              mdi-delete
+            </v-icon>
+          </v-btn>
+        </v-card-actions>
       </div>
     </v-card>
   </v-lazy>
@@ -56,7 +69,8 @@ export default {
   data: () => ({
     user_name: 'user_name',
     user_pseudo: 'user_pseudo',
-    userId: ''
+    userId: '',
+    user_role: localStorage.getItem('role')
   }),
   computed: {
     getUserId() {
@@ -84,6 +98,23 @@ export default {
       this.user_pseudo=userInfos.pseudo;
 
     },
+    deletePost () {
+      ( async () => {
+        const deleteResponse = await fetch(`http://localhost:4200/api/post/${this.post_id}`,
+            {
+              method: 'DELETE',
+              headers:{
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'authorization' : 'bearer '+localStorage.getItem('token')
+              }
+            });
+        this.$emit('delete-post');
+        return deleteResponse
+      }) ();
+
+    },
+
     getPostLikes() {
 
 

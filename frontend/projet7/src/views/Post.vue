@@ -6,6 +6,7 @@
         <PostCard :user_id="post.user_id"
                   :post_message="post.post_message"
                   :post_id="post.id"
+                  @delete-post="changeKey"
         ></PostCard>
       </li>
     </ul>
