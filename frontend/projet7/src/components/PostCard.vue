@@ -4,7 +4,6 @@
       <router-link :to="{name: 'Profile', params: {pseudo: post.user.pseudo}}">
         <v-card-title>{{ post.user.pseudo }}</v-card-title>
       </router-link>
-      <v-card-subtitle>{{ post.user.lastname }}</v-card-subtitle>
       <v-card-text>{{ post.post_message }}</v-card-text>
       <div class="v-card__actions">
         <v-card-actions class="actions__icons">
