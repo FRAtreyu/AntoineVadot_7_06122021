@@ -35,18 +35,6 @@
           </v-btn>
           <div class="dislikes">{{ dislikes }}</div>
         </v-card-actions>
-        <v-card-actions class="actions__icons">
-          <v-btn
-              class="mx-2"
-              fab
-              small
-              color="primary"
-          >
-            <v-icon>
-              mdi-message-text
-            </v-icon>
-          </v-btn>
-        </v-card-actions>
         <v-card-actions v-if="user_role==='admin'" class="actions__icons">
           <v-btn
               class="mx-2 delete"
@@ -61,21 +49,39 @@
           </v-btn>
         </v-card-actions>
       </div>
+      <v-expansion-panels>
+        <v-expansion-panel>
+          <v-expansion-panel-header
+          disable-icon-rotate
+          hide-actions>
+            Voir les {{commentList.length}} commentaires
+          </v-expansion-panel-header>
+          <v-expansion-panel-content>
+            <NewComment></NewComment>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
+
     </v-card>
   </v-lazy>
 </template>
 
 <script>
+import NewComment from "@/components/NewComment";
 
 export default {
   name: "PostCard",
+  components: {
+    NewComment
+  },
   props: ['post'],
   data: () => ({
     userId: localStorage.getItem('userId'),
     user_role: localStorage.getItem('role'),
     likes: 0,
     dislikes: 0,
-    card_key: 0
+    card_key: 0,
+    commentList: []
   }),
   computed: {},
   methods: {
@@ -131,7 +137,7 @@ export default {
       for (const likesArrayElement of likesArray) {
         if (likesArrayElement.like_value === 1) totalLikes++;
       }
-      return  totalLikes;
+      return totalLikes;
 
     },
     countDislikes() {
@@ -143,16 +149,16 @@ export default {
       return totalDislikes;
     },
     async updateLikes() {
-      await this.likePost().then(()=>{
+      await this.likePost().then(() => {
         this.likes = this.countLikes();
       });
-      await this.$nextTick(()=> this.$emit('like-update'));
+      await this.$nextTick(() => this.$emit('like-update'));
     },
-    async updateDislikes(){
-      await this.dislikePost().then(async ()=>{
+    async updateDislikes() {
+      await this.dislikePost().then(async () => {
         this.dislikes = await this.countDislikes()
       });
-      await this.$nextTick(()=> this.$emit('like-update'));
+      await this.$nextTick(() => this.$emit('like-update'));
     }
 
   },
@@ -181,7 +187,7 @@ export default {
   padding-top: 15px;
 }
 
-.v-card__actions {
+.v-card__actions, {
   display: flex;
   padding: 10px 0;
   flex-direction: row;
@@ -189,6 +195,11 @@ export default {
   width: 100%;
 }
 
+.v-expansion-panels,.v-expansion-panel, .v-expansion-panel-header, .v-expansion-panel-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
 .v-card-actions {
   display: flex;
   flex-direction: row;

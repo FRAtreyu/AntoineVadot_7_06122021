@@ -1,8 +1,8 @@
 <template>
   <div class="profile">
-    <div class="user__info">{{ userInfo.lastname }}</div>
-    <div class="user__info">{{ userInfo.pseudo }}</div>
-    <div class="user__info">{{ userInfo.email }}</div>
+    <div class="user__info">Nom:{{ userInfo.lastname }} {{userInfo.firstname}}</div>
+    <div class="user__info">Pseudo:{{ userInfo.pseudo }}</div>
+    <div class="user__info">Email:{{ userInfo.email }}</div>
     <v-btn
         v-if="userRole==='admin'&&this.$route.params.pseudo!=='admin_pseudo'"
         class="mx-2 delete"
