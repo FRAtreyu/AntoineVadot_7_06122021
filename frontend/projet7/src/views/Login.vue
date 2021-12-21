@@ -36,7 +36,7 @@ export default {
         console.log(content);
         if(content.userId){
            location.replace('/post')
-        } else alert('Mot de passe ou identifiant incorrect')
+        } else alert(content.error)
         localStorage.setItem('userId', content.userId);
         localStorage.setItem('token', content.token);
         localStorage.setItem('role', content.role)
