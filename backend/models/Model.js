@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize');
+require('dotenv').config({path:'../config/.env'})
 const sequelize = new Sequelize('groupomania', 'root', 'Atreyu01400!', {
     host: 'localhost',
     dialect: 'mysql'
