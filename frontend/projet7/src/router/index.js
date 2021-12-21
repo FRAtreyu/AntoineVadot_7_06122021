@@ -14,7 +14,7 @@ const routes = [
     component: Post
   },
   {
-    path: '/profile/:id',
+    path: '/profile/:pseudo',
     name: 'Profile',
     props: true,
     component: Profile,

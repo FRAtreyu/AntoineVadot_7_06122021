@@ -72,7 +72,8 @@ exports.login = (req, res) => {
                             `${process.env.JWT_TOKEN}`,
                             {expiresIn: '4h'}
                         ),
-                        'role': user.role.name
+                        'role': user.role.name,
+                        'pseudo': user.pseudo
                     });
                 } else {
                     return res.status(403).json({'error': 'Invalid password'})

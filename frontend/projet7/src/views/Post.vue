@@ -4,7 +4,7 @@
     <ul v-if="postList.length!==0">
         <PostCard v-for="post in postList" v-bind:post="post" :key="post.id"
                   @delete-post="changeKey"
-                  @like-update="changeKey"
+
         ></PostCard>
     </ul>
   </div>

@@ -6,11 +6,11 @@
         flat class="v-app-bar"
     >
       <v-container class="py-0 fill-height logo">
-          <img
-              src="./assets/icon-left-font-monochrome-black.svg"
-              alt="Groupomania logo"
-              class="logo"
-          >
+        <img
+            src="./assets/icon-left-font-monochrome-black.svg"
+            alt="Groupomania logo"
+            class="logo"
+        >
       </v-container>
     </v-app-bar>
 
@@ -24,10 +24,12 @@
                 <v-btn class="menu__btn" v-if="userConnected">Mur</v-btn>
               </router-link>
 
+              <template v-if="userPseudo">
+                <router-link :to="{name: 'Profile', params: {pseudo: userPseudo}}">
+                  <v-btn class="menu__btn" v-if="userConnected">Profil</v-btn>
+                </router-link>
+              </template>
 
-              <router-link :to="{name: 'Profile', params: {id: userId}}">
-                <v-btn class="menu__btn" v-if="userConnected">Profil</v-btn>
-              </router-link>
 
               <v-btn class="menu__btn" v-if="userConnected" @click="disconnect">
                 <v-icon>mdi-power</v-icon>
@@ -63,6 +65,7 @@ export default {
   data: () => ({
     userConnected: false,
     userId: localStorage.getItem('userId'),
+    userPseudo: localStorage.getItem('userPseudo')
   }),
 
   components: {},
@@ -76,9 +79,6 @@ export default {
       localStorage.clear();
       this.$router.push({name: 'Login'})
     },
-    forceUpdate() {
-      location.reload()
-    }
 
   },
   beforeMount() {
@@ -113,7 +113,7 @@ a {
   color: black !important;
 }
 
-.logo{
+.logo {
   max-height: 100%;
   max-width: 300px;
 }

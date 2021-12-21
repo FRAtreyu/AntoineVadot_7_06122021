@@ -40,6 +40,7 @@ export default {
         localStorage.setItem('userId', content.userId);
         localStorage.setItem('token', content.token);
         localStorage.setItem('role', content.role)
+        localStorage.setItem('userPseudo', content.pseudo)
       })();
     }
   }

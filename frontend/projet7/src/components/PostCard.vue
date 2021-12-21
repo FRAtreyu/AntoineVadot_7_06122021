@@ -1,38 +1,40 @@
 <template>
-  <v-lazy class="v-card__post" :key="card_key">
+  <v-lazy class="v-card__post" :key="card_key" @like-update="card_key++">
     <v-card elevation="6" shaped>
-      <v-card-title>{{ post.user.lastname }}</v-card-title>
-      <v-card-subtitle>{{ post.user.pseudo }}</v-card-subtitle>
+      <router-link :to="{name: 'Profile', params: {pseudo: post.user.pseudo}}">
+        <v-card-title>{{ post.user.pseudo }}</v-card-title>
+      </router-link>
+      <v-card-subtitle>{{ post.user.lastname }}</v-card-subtitle>
       <v-card-text>{{ post.post_message }}</v-card-text>
       <div class="v-card__actions">
-        <v-card-actions class="actions__icons" v-if="userId!==post.user_id">
+        <v-card-actions class="actions__icons">
           <v-btn
               class="mx-2 like__btn"
               fab
               small
               color="primary"
-              @click="likePost()"
+              @click="updateLikes"
           >
             <v-icon>
               mdi-plus
             </v-icon>
           </v-btn>
-          <div class="likes">{{ countLikes }}</div>
+          <div class="likes">{{ likes }}</div>
         </v-card-actions>
-        <v-card-actions class="actions__icons" v-if="userId!==post.user_id">
+        <v-card-actions class="actions__icons">
           <v-btn
               class="mx-2"
               fab
               small
               dark
               color="red"
-              @click="dislikePost()"
+              @click="updateDislikes"
           >
             <v-icon>
               mdi-minus
             </v-icon>
           </v-btn>
-          <div class="dislikes">{{ countDislikes}}</div>
+          <div class="dislikes">{{ dislikes }}</div>
         </v-card-actions>
         <v-card-actions class="actions__icons">
           <v-btn
@@ -72,28 +74,11 @@ export default {
   data: () => ({
     userId: localStorage.getItem('userId'),
     user_role: localStorage.getItem('role'),
-    likes:'',
-    dislikes:'',
+    likes: 0,
+    dislikes: 0,
     card_key: 0
   }),
-  computed: {
-    countLikes() {
-      let likesArray = this.post.likes;
-      let totalLikes = 0;
-      for (const likesArrayElement of likesArray) {
-        if (likesArrayElement.like_value === 1) totalLikes++;
-      }
-      return totalLikes;
-    },
-    countDislikes() {
-      let likesArray = this.post.likes;
-      let totalDislikes = 0;
-      for (const likes of likesArray) {
-        if (likes.like_value === -1) totalDislikes++;
-      }
-      return totalDislikes;
-    }
-  },
+  computed: {},
   methods: {
     deletePost() {
       (async () => {
@@ -112,47 +97,77 @@ export default {
 
     },
     likePost() {
-      (async () => {
-        const likeResponse = await fetch(`http://localhost:4200/api/post/${this.post.id}/like`,
-            {
-              method: 'POST',
-              headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'authorization': 'bearer ' + localStorage.getItem('token')
-              },
-              body: JSON.stringify({
-                like_value: 1
-              })
-            });
-        this.$emit('like-update');
-        return likeResponse
-      })();
+      return fetch(`http://localhost:4200/api/post/${this.post.id}/like`,
+          {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'authorization': 'bearer ' + localStorage.getItem('token')
+            },
+            body: JSON.stringify({
+              like_value: 1
+            })
+          }
+      ).then(res => res.json())
     },
     dislikePost() {
-      (async () => {
-
-        const dislikeResponse = fetch(`http://localhost:4200/api/post/${this.post.id}/like`,
-            {
-              method: 'POST',
-              headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'authorization': 'bearer ' + localStorage.getItem('token')
-              },
-              body: JSON.stringify({
-                like_value: -1
-              })
-            });
-        this.$emit('like-update');
-        return dislikeResponse
-      })();
+      return fetch(`http://localhost:4200/api/post/${this.post.id}/like`,
+          {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'authorization': 'bearer ' + localStorage.getItem('token')
+            },
+            body: JSON.stringify({
+              like_value: -1
+            })
+          }
+      ).then(res => res.json())
     },
+    countLikes() {
+      let likesArray = this.post.likes;
+      let totalLikes = 0;
+      for (const likesArrayElement of likesArray) {
+        if (likesArrayElement.like_value === 1) totalLikes++;
+      }
+      return  totalLikes;
+
+    },
+    countDislikes() {
+      let likesArray = this.post.likes;
+      let totalDislikes = 0;
+      for (const likes of likesArray) {
+        if (likes.like_value === -1) totalDislikes++;
+      }
+      return totalDislikes;
+    },
+    async updateLikes() {
+      await this.likePost().then(()=>{
+        this.likes = this.countLikes();
+      });
+      await this.$nextTick(()=> this.$emit('like-update'));
+    },
+    async updateDislikes(){
+      await this.dislikePost().then(async ()=>{
+        this.dislikes = await this.countDislikes()
+      });
+      await this.$nextTick(()=> this.$emit('like-update'));
+    }
 
   },
-  mounted() {
-    console.log(this.post)
+
+  created() {
+    this.likes = this.countLikes();
+    this.dislikes = this.countDislikes();
+  },
+
+  updated() {
+    this.likes = this.countLikes();
+    this.dislikes = this.countDislikes();
   }
+
 }
 
 
@@ -181,7 +196,7 @@ export default {
   max-width: 15%;
 }
 
-.actions__icons{
+.actions__icons {
   max-width: 90px;
 }
 

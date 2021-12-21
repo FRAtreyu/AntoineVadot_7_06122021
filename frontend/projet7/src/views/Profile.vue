@@ -16,14 +16,14 @@ import PostCard from "@/components/PostCard";
 export default {
   name: "Profile",
   components: {PostCard},
-  props: ['id'],
+  props: ['pseudo'],
   data: () => ({
     userInfo: {},
-    postList: []
+    postList: [],
   }),
   methods: {
     getUserInfos() {
-      return fetch(`http://localhost:4200/api/user/${this.id}`,
+      return fetch(`http://localhost:4200/api/user/${this.$route.params.pseudo}`,
           {
             method: 'GET',
             headers: {
@@ -38,7 +38,7 @@ export default {
     },
 
     getUserPosts() {
-        return  fetch(`http://localhost:4200/api/user/${this.id}/post`,
+        return  fetch(`http://localhost:4200/api/user/${this.userInfo.id}/post`,
             {
               method: 'GET',
               headers: {
@@ -52,9 +52,10 @@ export default {
       console.log(this.postList)
     }
   },
-  created() {
-    this.setUserInfos()
-    this.setUserPosts()
+  async created() {
+    console.log(this.$route.params.pseudo)
+    await this.setUserInfos()
+    await this.setUserPosts()
   }
   }
 

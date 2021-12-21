@@ -17,11 +17,12 @@ exports.getAllUsers = (req, res) => {
         .catch(() => res.status(500).json({'error': 'failed to fetch users'}))
 };
 
-exports.getOneUser = (req, res) => {
-    let userId = req.params.id;
+
+exports.getOneUserByPseudo = (req, res) => {
+    let userPseudo = req.params.pseudo;
     Model.User.findOne({
         attributes: ['id', 'firstname', 'lastname', 'pseudo', 'email', 'deleted'],
-        where: {id: userId}
+        where: { pseudo : userPseudo}
     })
         .then(user => {
             if (user && !user.deleted) {
@@ -33,7 +34,6 @@ exports.getOneUser = (req, res) => {
             }
         })
         .catch(() => res.status(500).json({'error': 'failed to fetch user'}))
-
 };
 
 exports.modifyUser = (req, res) => {
