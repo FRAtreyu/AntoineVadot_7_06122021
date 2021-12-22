@@ -25,7 +25,7 @@ export default {
       return fetch('http://localhost:4200/api/post/', {
         method: 'GET',
         headers: {
-          'authorization': 'bearer ' + localStorage.getItem('token')
+          'authorization': 'bearer ' + this.$cookies.get('token')
         }
       })
           .then(

@@ -38,9 +38,9 @@ export default {
            location.replace('/post')
         } else alert(content.error)
         localStorage.setItem('userId', content.userId);
-        localStorage.setItem('token', content.token);
-        localStorage.setItem('role', content.role)
         localStorage.setItem('userPseudo', content.pseudo)
+        this.$cookies.set('token',content.token,Infinity)
+        this.$cookies.set('role', content.role,Infinity)
       })();
     }
   }

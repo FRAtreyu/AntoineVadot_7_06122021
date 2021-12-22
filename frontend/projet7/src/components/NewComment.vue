@@ -34,7 +34,7 @@ export default {
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'authorization': 'bearer ' + localStorage.getItem('token')
+            'authorization': 'bearer ' + this.$cookies.get('token')
           },
           body: JSON.stringify({
             comment_message: this.comment_message

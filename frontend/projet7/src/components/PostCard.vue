@@ -36,7 +36,7 @@
             </v-btn>
             <div class="dislikes">{{ countDislikes }}</div>
           </v-card-actions>
-          <v-card-actions v-if="user_role==='admin'" class="actions__icons">
+          <v-card-actions v-if="this.$cookies.get('role')==='admin'" class="actions__icons">
             <v-btn
                 class="mx-2 delete"
                 fab
@@ -88,7 +88,6 @@ export default {
   props: ['post'],
   data: () => ({
     userId: localStorage.getItem('userId'),
-    user_role: localStorage.getItem('role'),
     likes: 0,
     dislikes: 0,
     commentList: [],
@@ -121,7 +120,7 @@ export default {
               headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'authorization': 'bearer ' + localStorage.getItem('token')
+                'authorization': 'bearer ' + this.$cookies.get('token')
               }
             });
         this.$emit('delete-post');
@@ -137,7 +136,7 @@ export default {
               headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'authorization': 'bearer ' + localStorage.getItem('token')
+                'authorization': 'bearer ' + this.$cookies.get('token')
               },
               body: JSON.stringify({
                 like_value: 1
@@ -156,7 +155,7 @@ export default {
               headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'authorization': 'bearer ' + localStorage.getItem('token')
+                'authorization': 'bearer ' + this.$cookies.get('token')
               },
               body: JSON.stringify({
                 like_value: -1
@@ -178,7 +177,7 @@ export default {
           {
             method: 'GET',
             headers: {
-              'authorization': 'bearer ' + localStorage.getItem('token')
+              'authorization': 'bearer ' + this.$cookies.get('token')
             }
           }).then(res => res.json())
     },

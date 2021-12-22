@@ -4,7 +4,7 @@
     <div class="user__info">Pseudo:{{ userInfo.pseudo }}</div>
     <div class="user__info">Email:{{ userInfo.email }}</div>
     <v-btn
-        v-if="userRole==='admin'&&this.$route.params.pseudo!=='admin_pseudo'"
+        v-if="this.$cookies.get('role')==='admin'&&this.$route.params.pseudo!=='admin_pseudo'"
         class="mx-2 delete"
         fab
         small
@@ -32,7 +32,6 @@ export default {
   data: () => ({
     userInfo: {},
     postList: [],
-    userRole: localStorage.getItem('role'),
   }),
   methods: {
     getUserInfos() {
@@ -40,7 +39,7 @@ export default {
           {
             method: 'GET',
             headers: {
-              'authorization': 'bearer ' + localStorage.getItem('token')
+              'authorization': 'bearer ' + this.$cookies.get('token')
             }
           }).then(res => res.json())
     },
@@ -55,7 +54,7 @@ export default {
           {
             method: 'GET',
             headers: {
-              'authorization': 'bearer ' + localStorage.getItem('token')
+              'authorization': 'bearer ' + this.$cookies.get('token')
             }
           }).then(res => res.json())
     },
@@ -70,7 +69,7 @@ export default {
             {
               method: 'DELETE',
               headers: {
-                'authorization': 'bearer ' + localStorage.getItem('token')
+                'authorization': 'bearer ' + this.$cookies.get('token')
               }
             }).then(() => {
           location.assign('/post');

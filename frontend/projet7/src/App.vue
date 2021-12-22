@@ -72,11 +72,12 @@ export default {
   computed: {},
   methods: {
     setUserConnected() {
-      if (localStorage.getItem('token')) this.userConnected = true;
+      if (this.$cookies.get('token')) this.userConnected = true;
     },
     disconnect() {
       this.userConnected = false;
       localStorage.clear();
+      this.$cookies.remove('token')
       this.$router.push({name: 'Login'})
     },
 
