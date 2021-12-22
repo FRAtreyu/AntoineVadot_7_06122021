@@ -32,7 +32,7 @@ export default {
   data: () => ({
     userInfo: {},
     postList: [],
-    userRole: localStorage.getItem('role')
+    userRole: localStorage.getItem('role'),
   }),
   methods: {
     getUserInfos() {
@@ -46,7 +46,7 @@ export default {
     },
 
     async setUserInfos() {
-      this.userInfo = await this.getUserInfos()
+      this.userInfo = await this.getUserInfos();
       console.log(this.userInfo)
     },
 
@@ -83,7 +83,8 @@ export default {
     console.log(this.$route.params.pseudo)
     await this.setUserInfos()
     await this.setUserPosts()
-  }
+  },
+
 }
 
 </script>
