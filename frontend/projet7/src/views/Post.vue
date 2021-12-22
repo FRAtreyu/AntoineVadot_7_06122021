@@ -1,9 +1,8 @@
 <template>
-  <div class="home" :key="div_key">
-    <NewPost ></NewPost>
+  <div class="home">
+    <NewPost @new-post="setPostList" ></NewPost>
     <ul v-if="postList.length!==0">
         <PostCard v-for="post in postList" v-bind:post="post" :key="post.id"
-                  @delete-post="changeKey"
         ></PostCard>
     </ul>
   </div>
@@ -16,7 +15,6 @@ export default {
   name: 'Post',
   data: () => ({
     postList: [],
-    div_key:0
   }),
   components: {
     PostCard,
@@ -40,18 +38,11 @@ export default {
       this.postList = list.reverse();
     },
 
-    changeKey() {
-      this.setPostList();
-      this.div_key ++;
-    }
-
   },
   created() {
     this.setPostList()
   },
-  updated() {
-    this.setPostList()
-  }
+
 }
 
 </script>

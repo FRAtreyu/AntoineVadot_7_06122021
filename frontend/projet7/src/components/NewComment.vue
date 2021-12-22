@@ -41,6 +41,7 @@ export default {
           })
         })
         this.comment_message='';
+        this.$emit('new-comment')
         return response.json();
       }) ();
 

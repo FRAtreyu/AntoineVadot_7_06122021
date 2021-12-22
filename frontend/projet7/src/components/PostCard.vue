@@ -13,13 +13,13 @@
                 fab
                 small
                 color="primary"
-                @click="updateLikes"
+                @click="likePost"
             >
               <v-icon>
                 mdi-plus
               </v-icon>
             </v-btn>
-            <div class="likes">{{ likes }}</div>
+            <div class="likes">{{ countLikes }}</div>
           </v-card-actions>
           <v-card-actions class="actions__icons">
             <v-btn
@@ -28,13 +28,13 @@
                 small
                 dark
                 color="red"
-                @click="updateDislikes"
+                @click="dislikePost"
             >
               <v-icon>
                 mdi-minus
               </v-icon>
             </v-btn>
-            <div class="dislikes">{{ dislikes }}</div>
+            <div class="dislikes">{{ countDislikes }}</div>
           </v-card-actions>
           <v-card-actions v-if="user_role==='admin'" class="actions__icons">
             <v-btn
@@ -43,7 +43,6 @@
                 small
                 color="red"
                 @click="deletePost"
-
             >
               <v-icon>
                 mdi-delete
@@ -58,13 +57,13 @@
                 hide-actions>
               Voir les {{ commentList.length }} commentaires
             </v-expansion-panel-header>
-            <v-expansion-panel-content >
-              <NewComment :post_id="post.id"></NewComment>
+            <v-expansion-panel-content>
+              <NewComment :post_id="post.id" @new-comment="setCommentList"></NewComment>
               <v-divider></v-divider>
               <ul v-for="comment in commentList" :key="comment.id">
                 <v-card elevation="5" rounded class="comment">
                   <router-link :to="{name: 'Profile', params: {pseudo: post.user.pseudo}}">
-                  <v-card-title>{{comment.user.pseudo}}:</v-card-title>
+                    <v-card-title>{{ comment.user.pseudo }}:</v-card-title>
                   </router-link>
                   <v-card-text>{{ comment.comment_message }}</v-card-text>
                 </v-card>
@@ -73,7 +72,6 @@
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
-
       </v-card>
     </v-lazy>
   </div>
@@ -96,6 +94,23 @@ export default {
     commentList: [],
   }),
   computed: {
+    countLikes() {
+      let likesArray = this.post.likes;
+      let totalLikes = 0;
+      for (const likesArrayElement of likesArray) {
+        if (likesArrayElement.like_value === 1) totalLikes++;
+      }
+      return totalLikes;
+
+    },
+    countDislikes() {
+      let likesArray = this.post.likes;
+      let totalDislikes = 0;
+      for (const likes of likesArray) {
+        if (likes.like_value === -1) totalDislikes++;
+      }
+      return totalDislikes;
+    }
   },
   methods: {
     deletePost() {
@@ -113,87 +128,65 @@ export default {
 
     },
     likePost() {
-      return fetch(`http://localhost:4200/api/post/${this.post.id}/like`,
-          {
-            method: 'POST',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-              'authorization': 'bearer ' + localStorage.getItem('token')
-            },
-            body: JSON.stringify({
-              like_value: 1
-            })
-          }
-      ).then(res => res.json())
+      (async () => {
+        const likeResponse = await fetch(`http://localhost:4200/api/post/${this.post.id}/like`,
+            {
+              method: 'POST',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'authorization': 'bearer ' + localStorage.getItem('token')
+              },
+              body: JSON.stringify({
+                like_value: 1
+              })
+            }
+        );
+        this.likes = this.countLikes;
+        return likeResponse.json()
+      })();
     },
     dislikePost() {
-      return fetch(`http://localhost:4200/api/post/${this.post.id}/like`,
-          {
-            method: 'POST',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-              'authorization': 'bearer ' + localStorage.getItem('token')
-            },
-            body: JSON.stringify({
-              like_value: -1
-            })
-          }
-      ).then(res => res.json())
-    },
-    countLikes() {
-      let likesArray = this.post.likes;
-      let totalLikes = 0;
-      for (const likesArrayElement of likesArray) {
-        if (likesArrayElement.like_value === 1) totalLikes++;
-      }
-      return totalLikes;
-
-    },
-    countDislikes() {
-      let likesArray = this.post.likes;
-      let totalDislikes = 0;
-      for (const likes of likesArray) {
-        if (likes.like_value === -1) totalDislikes++;
-      }
-      return totalDislikes;
-    },
-    async updateLikes() {
-      await this.likePost().then(() => {
-        this.likes = this.countLikes();
-      });
-
-    },
-    async updateDislikes() {
-      await this.dislikePost().then(async () => {
-        this.dislikes = await this.countDislikes()
-      });
-    },
-
-     async setCommentList() {
-        this.commentList = await fetch(`http://localhost:4200/api/post/${this.post.id}/comment`,
+      (async () => {
+        const dislikeResponse = await fetch(`http://localhost:4200/api/post/${this.post.id}/like`,
             {
-              method: 'GET',
-              headers:{
+              method: 'POST',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
                 'authorization': 'bearer ' + localStorage.getItem('token')
-              }
-            }).then(res=>res.json())
+              },
+              body: JSON.stringify({
+                like_value: -1
+              })
+            }
+        );
+        this.dislikes = this.countDislikes;
+        return dislikeResponse.json()
+      })();
+    },
+
+    setLikes() {
+      this.likes = this.countLikes;
+      this.dislikes = this.countDislikes
+    },
+
+    async setCommentList() {
+      this.commentList = await fetch(`http://localhost:4200/api/post/${this.post.id}/comment`,
+          {
+            method: 'GET',
+            headers: {
+              'authorization': 'bearer ' + localStorage.getItem('token')
+            }
+          }).then(res => res.json())
     },
 
   },
 
   created() {
-    this.likes = this.countLikes();
-    this.dislikes = this.countDislikes();
+    this.setLikes()
     this.setCommentList()
   },
-
-  updated() {
-    this.likes = this.countLikes();
-    this.dislikes = this.countDislikes();
-    this.setCommentList()
-  }
 
 }
 
@@ -208,7 +201,8 @@ export default {
   flex-direction: column;
 
 }
-.post{
+
+.post {
   width: 90%;
   max-width: 800px;
   display: flex;
@@ -244,7 +238,7 @@ export default {
   color: black;
 }
 
-.comment{
+.comment {
   margin: 5px;
 }
 </style>
