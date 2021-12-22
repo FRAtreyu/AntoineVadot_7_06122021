@@ -43,6 +43,7 @@
                 small
                 color="red"
                 @click="deletePost"
+
             >
               <v-icon>
                 mdi-delete
@@ -58,10 +59,15 @@
               Voir les {{ commentList.length }} commentaires
             </v-expansion-panel-header>
             <v-expansion-panel-content >
-              <NewComment :post_id="post.id" @new-comment="setCommentList"></NewComment>
+              <NewComment :post_id="post.id"></NewComment>
               <v-divider></v-divider>
               <ul v-for="comment in commentList" :key="comment.id">
-                {{ comment.comment_message }}
+                <v-card elevation="5" rounded class="comment">
+                  <router-link :to="{name: 'Profile', params: {pseudo: post.user.pseudo}}">
+                  <v-card-title>{{comment.user.pseudo}}:</v-card-title>
+                  </router-link>
+                  <v-card-text>{{ comment.comment_message }}</v-card-text>
+                </v-card>
                 <v-divider></v-divider>
               </ul>
             </v-expansion-panel-content>
@@ -89,16 +95,12 @@ export default {
     dislikes: 0,
     commentList: [],
   }),
-  computed: {},
-  watch: {
-    post: function (){
-      this.$forceUpdate()
-    }
+  computed: {
   },
   methods: {
     deletePost() {
       (async () => {
-        const deleteResponse = await fetch(`http://localhost:4200/api/post/${this.post.id}`,
+        return await fetch(`http://localhost:4200/api/post/${this.post.id}`,
             {
               method: 'DELETE',
               headers: {
@@ -106,9 +108,7 @@ export default {
                 'Content-Type': 'application/json',
                 'authorization': 'bearer ' + localStorage.getItem('token')
               }
-            });
-        this.$emit('delete-post');
-        return deleteResponse
+            })
       })();
 
     },
@@ -163,23 +163,27 @@ export default {
       await this.likePost().then(() => {
         this.likes = this.countLikes();
       });
-      await this.$nextTick();
+
     },
     async updateDislikes() {
       await this.dislikePost().then(async () => {
         this.dislikes = await this.countDislikes()
       });
-      await this.$nextTick();
     },
 
-    setCommentList() {
-        this.commentList = this.post.comments;
-        console.log(this.commentList)
+     async setCommentList() {
+        this.commentList = await fetch(`http://localhost:4200/api/post/${this.post.id}/comment`,
+            {
+              method: 'GET',
+              headers:{
+                'authorization': 'bearer ' + localStorage.getItem('token')
+              }
+            }).then(res=>res.json())
     },
 
   },
 
-  mounted() {
+  created() {
     this.likes = this.countLikes();
     this.dislikes = this.countDislikes();
     this.setCommentList()
@@ -188,6 +192,7 @@ export default {
   updated() {
     this.likes = this.countLikes();
     this.dislikes = this.countDislikes();
+    this.setCommentList()
   }
 
 }
@@ -237,5 +242,9 @@ export default {
 
 .likes {
   color: black;
+}
+
+.comment{
+  margin: 5px;
 }
 </style>

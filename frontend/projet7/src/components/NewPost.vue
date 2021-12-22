@@ -40,7 +40,6 @@ export default {
           })
         })
         this.post_message='';
-        this.$emit('new-post');
         return response.json();
       }) ();
 

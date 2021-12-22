@@ -97,7 +97,7 @@ exports.createOneComment = (req, res) => {
 
 exports.getAllComments = (req, res) => {
     let postId = req.params.id;
-    Model.Comment.findAll({where: {post_id: postId, user_deleted: false, deleted: false}})
+    Model.Comment.findAll({where: {post_id: postId, user_deleted: false, deleted: false}, include:  Model.User})
         .then(comments => {
             if (comments) {
                 return res.status(201).json(comments);

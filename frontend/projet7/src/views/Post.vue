@@ -1,6 +1,6 @@
 <template>
   <div class="home" :key="div_key">
-    <NewPost @new-post="changeKey"></NewPost>
+    <NewPost ></NewPost>
     <ul v-if="postList.length!==0">
         <PostCard v-for="post in postList" v-bind:post="post" :key="post.id"
                   @delete-post="changeKey"
@@ -47,6 +47,9 @@ export default {
 
   },
   created() {
+    this.setPostList()
+  },
+  updated() {
     this.setPostList()
   }
 }

@@ -39,9 +39,7 @@ export default {
           body: JSON.stringify({
             comment_message: this.comment_message
           })
-        }).then(
-            this.$emit('new-comment')
-        )
+        })
         this.comment_message='';
         return response.json();
       }) ();
