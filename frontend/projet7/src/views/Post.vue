@@ -4,7 +4,6 @@
     <ul v-if="postList.length!==0">
         <PostCard v-for="post in postList" v-bind:post="post" :key="post.id"
                   @delete-post="changeKey"
-
         ></PostCard>
     </ul>
   </div>
@@ -39,7 +38,6 @@ export default {
     async setPostList() {
       let list = await this.getAllPosts();
       this.postList = list.reverse();
-      console.log(this.postList[0])
     },
 
     changeKey() {

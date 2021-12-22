@@ -20,6 +20,7 @@
 <script>
 export default {
   name: "NewComment",
+  props:['post_id'],
   data: () => ({
     comment_message: '',
     rules: [v => v.length <= 255 || 'Max 255 characters'],
@@ -28,7 +29,7 @@ export default {
     send() {
       console.log(this.comment_message);
       (async () => {
-        const response = await fetch('http://localhost:4200/api/post', {
+        const response = await fetch(`http://localhost:4200/api/post/${this.post_id}/comment`, {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
@@ -38,9 +39,10 @@ export default {
           body: JSON.stringify({
             comment_message: this.comment_message
           })
-        })
+        }).then(
+            this.$emit('new-comment')
+        )
         this.comment_message='';
-        this.$emit('new-comment');
         return response.json();
       }) ();
 
@@ -52,5 +54,6 @@ export default {
 <style scoped>
 .newCommentText {
   width: 80%;
+  margin-bottom: 10px;
 }
 </style>

@@ -1,69 +1,76 @@
 <template>
-  <v-lazy class="v-card__post" :key="card_key" @like-update="card_key++">
-    <v-card elevation="6" shaped>
-      <router-link :to="{name: 'Profile', params: {pseudo: post.user.pseudo}}">
-        <v-card-title>{{ post.user.pseudo }}</v-card-title>
-      </router-link>
-      <v-card-text>{{ post.post_message }}</v-card-text>
-      <div class="v-card__actions">
-        <v-card-actions class="actions__icons">
-          <v-btn
-              class="mx-2 like__btn"
-              fab
-              small
-              color="primary"
-              @click="updateLikes"
-          >
-            <v-icon>
-              mdi-plus
-            </v-icon>
-          </v-btn>
-          <div class="likes">{{ likes }}</div>
-        </v-card-actions>
-        <v-card-actions class="actions__icons">
-          <v-btn
-              class="mx-2"
-              fab
-              small
-              dark
-              color="red"
-              @click="updateDislikes"
-          >
-            <v-icon>
-              mdi-minus
-            </v-icon>
-          </v-btn>
-          <div class="dislikes">{{ dislikes }}</div>
-        </v-card-actions>
-        <v-card-actions v-if="user_role==='admin'" class="actions__icons">
-          <v-btn
-              class="mx-2 delete"
-              fab
-              small
-              color="red"
-              @click="deletePost"
-          >
-            <v-icon>
-              mdi-delete
-            </v-icon>
-          </v-btn>
-        </v-card-actions>
-      </div>
-      <v-expansion-panels>
-        <v-expansion-panel>
-          <v-expansion-panel-header
-          disable-icon-rotate
-          hide-actions>
-            Voir les {{commentList.length}} commentaires
-          </v-expansion-panel-header>
-          <v-expansion-panel-content>
-            <NewComment></NewComment>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
+  <div class="post">
+    <v-lazy class="v-card__post">
+      <v-card elevation="6" shaped>
+        <router-link :to="{name: 'Profile', params: {pseudo: post.user.pseudo}}">
+          <v-card-title>{{ post.user.pseudo }}</v-card-title>
+        </router-link>
+        <v-card-text>{{ post.post_message }}</v-card-text>
+        <div class="v-card__actions">
+          <v-card-actions class="actions__icons">
+            <v-btn
+                class="mx-2 like__btn"
+                fab
+                small
+                color="primary"
+                @click="updateLikes"
+            >
+              <v-icon>
+                mdi-plus
+              </v-icon>
+            </v-btn>
+            <div class="likes">{{ likes }}</div>
+          </v-card-actions>
+          <v-card-actions class="actions__icons">
+            <v-btn
+                class="mx-2"
+                fab
+                small
+                dark
+                color="red"
+                @click="updateDislikes"
+            >
+              <v-icon>
+                mdi-minus
+              </v-icon>
+            </v-btn>
+            <div class="dislikes">{{ dislikes }}</div>
+          </v-card-actions>
+          <v-card-actions v-if="user_role==='admin'" class="actions__icons">
+            <v-btn
+                class="mx-2 delete"
+                fab
+                small
+                color="red"
+                @click="deletePost"
+            >
+              <v-icon>
+                mdi-delete
+              </v-icon>
+            </v-btn>
+          </v-card-actions>
+        </div>
+        <v-expansion-panels>
+          <v-expansion-panel>
+            <v-expansion-panel-header
+                disable-icon-rotate
+                hide-actions>
+              Voir les {{ commentList.length }} commentaires
+            </v-expansion-panel-header>
+            <v-expansion-panel-content >
+              <NewComment :post_id="post.id" @new-comment="setCommentList"></NewComment>
+              <v-divider></v-divider>
+              <ul v-for="comment in commentList" :key="comment.id">
+                {{ comment.comment_message }}
+                <v-divider></v-divider>
+              </ul>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
 
-    </v-card>
-  </v-lazy>
+      </v-card>
+    </v-lazy>
+  </div>
 </template>
 
 <script>
@@ -80,10 +87,14 @@ export default {
     user_role: localStorage.getItem('role'),
     likes: 0,
     dislikes: 0,
-    card_key: 0,
-    commentList: []
+    commentList: [],
   }),
   computed: {},
+  watch: {
+    post: function (){
+      this.$forceUpdate()
+    }
+  },
   methods: {
     deletePost() {
       (async () => {
@@ -152,20 +163,26 @@ export default {
       await this.likePost().then(() => {
         this.likes = this.countLikes();
       });
-      await this.$nextTick(() => this.$emit('like-update'));
+      await this.$nextTick();
     },
     async updateDislikes() {
       await this.dislikePost().then(async () => {
         this.dislikes = await this.countDislikes()
       });
-      await this.$nextTick(() => this.$emit('like-update'));
-    }
+      await this.$nextTick();
+    },
+
+    setCommentList() {
+        this.commentList = this.post.comments;
+        console.log(this.commentList)
+    },
 
   },
 
-  created() {
+  mounted() {
     this.likes = this.countLikes();
     this.dislikes = this.countDislikes();
+    this.setCommentList()
   },
 
   updated() {
@@ -180,6 +197,13 @@ export default {
 
 <style scoped lang="scss">
 .v-card__post {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+
+}
+.post{
   width: 90%;
   max-width: 800px;
   display: flex;
@@ -195,11 +219,12 @@ export default {
   width: 100%;
 }
 
-.v-expansion-panels,.v-expansion-panel, .v-expansion-panel-header, .v-expansion-panel-content {
+.v-expansion-panels, .v-expansion-panel, .v-expansion-panel-header, .v-expansion-panel-content {
   display: flex;
   flex-direction: column;
   width: 100%;
 }
+
 .v-card-actions {
   display: flex;
   flex-direction: row;
