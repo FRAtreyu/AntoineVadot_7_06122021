@@ -5,6 +5,7 @@
         <router-link :to="{name: 'Profile', params: {pseudo: post.user.pseudo}}">
           <v-card-title>{{ post.user.pseudo }}</v-card-title>
         </router-link>
+        <v-card-subtitle>Le {{formatDate}} à {{formatTime}}</v-card-subtitle>
         <v-card-text>{{ post.post_message }}</v-card-text>
         <div class="v-card__actions">
           <v-card-actions class="actions__icons">
@@ -61,7 +62,7 @@
               <NewComment :post_id="post.id" @new-comment="setCommentList"></NewComment>
               <v-divider></v-divider>
               <ul v-for="comment in commentList" :key="comment.id">
-                <v-card elevation="5" rounded class="comment">
+                <v-card elevation="5" shaped class="comment">
                   <router-link :to="{name: 'Profile', params: {pseudo: post.user.pseudo}}">
                     <v-card-title>{{ comment.user.pseudo }}:</v-card-title>
                   </router-link>
@@ -79,6 +80,7 @@
 
 <script>
 import NewComment from "@/components/NewComment";
+import moment from "moment";
 
 export default {
   name: "PostCard",
@@ -109,6 +111,13 @@ export default {
         if (likes.like_value === -1) totalDislikes++;
       }
       return totalDislikes;
+    },
+    formatDate(){
+      return moment(this.post.createdAt).format('dd.mm.YYYY')
+    },
+    formatTime(){
+      let time = this.post.createdAt.split('T')[1];
+      return time.split('.')[0]
     }
   },
   methods: {
