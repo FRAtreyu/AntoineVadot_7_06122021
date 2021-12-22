@@ -142,7 +142,7 @@ export default {
               })
             }
         );
-        this.likes = this.countLikes;
+        this.$emit('update-like')
         return likeResponse.json()
       })();
     },
@@ -161,7 +161,7 @@ export default {
               })
             }
         );
-        this.dislikes = this.countDislikes;
+        this.$emit('update-like')
         return dislikeResponse.json()
       })();
     },

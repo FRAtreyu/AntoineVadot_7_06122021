@@ -2,7 +2,7 @@
   <div class="home">
     <NewPost @new-post="setPostList" ></NewPost>
     <ul v-if="postList.length!==0">
-        <PostCard v-for="post in postList" v-bind:post="post" :key="post.id"
+        <PostCard v-for="post in postList" v-bind:post="post" :key="post.id" @update-like="setPostList"
         ></PostCard>
     </ul>
   </div>
