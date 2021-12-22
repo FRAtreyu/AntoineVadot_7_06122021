@@ -4,5 +4,4 @@ const auth = require('../middlewares/auth')
 const ctrlComment = require('../controllers/comment');
 
 router.delete('/:id', auth,ctrlComment.deleteComment)
-
 module.exports = router;

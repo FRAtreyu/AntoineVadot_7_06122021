@@ -16,7 +16,7 @@
       </v-icon>
     </v-btn>
     <ul class="user__posts">
-      <PostCard v-for="post in postList" v-bind:post="post" :key="post.id" @update-like="setUserPosts"
+      <PostCard v-for="post in postList" v-bind:post="post" :key="post.id" @update-like="setUserPosts" @delete-post="setUserPosts"
       ></PostCard>
     </ul>
   </div>

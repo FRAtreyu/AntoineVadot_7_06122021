@@ -115,7 +115,7 @@ export default {
   methods: {
     deletePost() {
       (async () => {
-        return await fetch(`http://localhost:4200/api/post/${this.post.id}`,
+        const deleteResponse = await fetch(`http://localhost:4200/api/post/${this.post.id}`,
             {
               method: 'DELETE',
               headers: {
@@ -123,7 +123,9 @@ export default {
                 'Content-Type': 'application/json',
                 'authorization': 'bearer ' + localStorage.getItem('token')
               }
-            })
+            });
+        this.$emit('delete-post');
+        return deleteResponse
       })();
 
     },
