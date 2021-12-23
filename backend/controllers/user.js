@@ -21,8 +21,8 @@ exports.getAllUsers = (req, res) => {
 exports.getOneUserByPseudo = (req, res) => {
     let userPseudo = req.params.pseudo;
     Model.User.findOne({
-        attributes: ['id', 'firstname', 'lastname', 'pseudo', 'email', 'deleted'],
-        where: { pseudo : userPseudo}
+        attributes: ['id', 'firstname', 'lastname', 'pseudo', 'email', 'deleted', 'avatarURL'],
+        where: { pseudo : userPseudo},
     })
         .then(user => {
             if (user && !user.deleted) {
@@ -36,39 +36,16 @@ exports.getOneUserByPseudo = (req, res) => {
         .catch(() => res.status(500).json({'error': 'failed to fetch user'}))
 };
 
-exports.modifyUser = (req, res) => {
-    let userId = req.params.id;
-    let pseudo = req.body.pseudo;
-    let email = req.body.email;
-    let emailExist = Model.User.findOne({attributes: ['email'], where: {email: email}});
-    Model.User.findOne({
-        attributes: ['id', 'pseudo', 'email', 'deleted'],
-        where: {id: userId}
-    })
-        .then(user => {
-            if (user && !user.deleted) {
-                if (pseudo != null) {
-                    user.set({
-                        pseudo: pseudo
-                    })
-                }
-                if (email != null) {
-                    if (EMAIL_REGEX.test(email) && !emailExist) {
-                        user.set({
-                            email: email
-                        })
-                    } else {
-                        return res.status(400).json({'error': 'email invalid or already in use'})
-                    }
-                }
-                user.save();
-                return res.status(201).json(user);
-            } else {
-                res.status(404).json({'error': 'user not found'})
-            }
-
+exports.setAvatar =  (req, res) => {
+    const avatarURL = `${req.file.destination}/${req.file.filename}`
+     Model.User.findOne({where:{id : req.params.id}})
+        .then(async user => {
+            await user.set({avatar_url: avatarURL});
+            console.log(user.avatar_url)
+            user.save();
+            return res.status(201).json({message: 'avatar uploaded'})
         })
-        .catch(() => res.status(500).json({'error': 'failed to update user'}))
+        .catch(()=> res.status(500).json({'error':'failed to upload avatar'}))
 };
 
 exports.deleteUser = (req, res) => {

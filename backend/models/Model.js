@@ -26,7 +26,8 @@ const User = sequelize.define('user', {
         password: {type: Sequelize.STRING, allowNull: false},
         pseudo: {type: Sequelize.STRING, allowNull: false, unique: true},
         deleted: {type: Sequelize.BOOLEAN, default: false},
-        role_id: {type: Sequelize.INTEGER, allowNull: false, default: 0}
+        role_id: {type: Sequelize.INTEGER, allowNull: false, default: 0},
+        avatar_url: {type: Sequelize.STRING, allowNull: true, default:''}
     },
     {
         tableName: 'user', timestamps: false, underscored: true
@@ -92,5 +93,7 @@ Like.belongsTo(Post);
 
 User.hasMany(Like);
 Like.belongsTo(User);
+
+
 
 sequelize.sync({logging: console.log});
