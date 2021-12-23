@@ -3,12 +3,14 @@
     <div class="user__info">Nom: {{userInfo.firstname}} {{ userInfo.lastname }} </div>
     <div class="user__info">Pseudo: {{ userInfo.pseudo }}</div>
     <div class="user__info">Email: {{ userInfo.email }}</div>
-    <v-file-input class="avatar__input"
+    <v-file-input
+        class="avatar__input"
         :rules="rules"
         accept="image/png, image/jpeg, image/bmp"
         placeholder="Pick an avatar"
         prepend-icon="mdi-camera"
         label="Avatar"
+        name="avatar"
     ></v-file-input>
     <v-btn
         v-if="this.$cookies.get('role')==='admin'&&this.$route.params.pseudo!=='admin_pseudo'"
