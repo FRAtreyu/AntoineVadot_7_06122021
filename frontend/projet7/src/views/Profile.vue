@@ -3,6 +3,16 @@
     <div class="user__info">Nom:{{ userInfo.lastname }} {{userInfo.firstname}}</div>
     <div class="user__info">Pseudo:{{ userInfo.pseudo }}</div>
     <div class="user__info">Email:{{ userInfo.email }}</div>
+    <v-avatar>
+      <v-img :src="setAvatarUrl" alt="avatar"></v-img>
+    </v-avatar>
+    <v-file-input class="avatar__input"
+        :rules="rules"
+        accept="image/png, image/jpeg, image/bmp"
+        placeholder="Pick an avatar"
+        prepend-icon="mdi-camera"
+        label="Avatar"
+    ></v-file-input>
     <v-btn
         v-if="this.$cookies.get('role')==='admin'&&this.$route.params.pseudo!=='admin_pseudo'"
         class="mx-2 delete"
@@ -32,7 +42,17 @@ export default {
   data: () => ({
     userInfo: {},
     postList: [],
+    rules: [
+      value => !value || value.size < 2000000 || 'Avatar size should be less than 2 MB!',
+    ]
   }),
+
+  computed: {
+    setAvatarUrl(){
+      let imageUrl = this.userInfo.avatar_url.split('.')[1]+"."+this.userInfo.avatar_url.split('.')[2];
+      return "http://localhost:4200"+imageUrl;
+    }
+  },
   methods: {
     getUserInfos() {
       return fetch(`http://localhost:4200/api/user/${this.$route.params.pseudo}`,
@@ -89,5 +109,7 @@ export default {
 </script>
 
 <style scoped>
-
+.avatar__input{
+  width: 200px;
+}
 </style>

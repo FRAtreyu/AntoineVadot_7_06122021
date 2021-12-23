@@ -21,7 +21,6 @@ exports.getAllUsers = (req, res) => {
 exports.getOneUserByPseudo = (req, res) => {
     let userPseudo = req.params.pseudo;
     Model.User.findOne({
-        attributes: ['id', 'firstname', 'lastname', 'pseudo', 'email', 'deleted', 'avatarURL'],
         where: { pseudo : userPseudo},
     })
         .then(user => {
