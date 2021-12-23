@@ -3,7 +3,7 @@
     <v-lazy class="v-card__post">
       <v-card elevation="6" shaped>
         <router-link :to="{name: 'Profile', params: {pseudo: post.user.pseudo}}">
-          <v-card-title>{{ post.user.pseudo }}</v-card-title>
+          <v-card-title><Avatar :avatar_url="post.user.avatar_url"></Avatar>{{ post.user.pseudo }}</v-card-title>
         </router-link>
         <v-card-subtitle>Le {{formatDate}} à {{formatTime}}</v-card-subtitle>
         <v-card-text>{{ post.post_message }}</v-card-text>
@@ -64,7 +64,7 @@
               <ul v-for="comment in commentList" :key="comment.id">
                 <v-card elevation="5" shaped class="comment">
                   <router-link :to="{name: 'Profile', params: {pseudo: post.user.pseudo}}">
-                    <v-card-title>{{ comment.user.pseudo }}:</v-card-title>
+                    <v-card-title><Avatar :avatar_url="post.user.avatar_url"></Avatar>{{ comment.user.pseudo }}:</v-card-title>
                   </router-link>
                   <v-card-text>{{ comment.comment_message }}</v-card-text>
                 </v-card>
@@ -81,10 +81,12 @@
 <script>
 import NewComment from "@/components/NewComment";
 import moment from "moment";
+import Avatar from "@/components/Avatar";
 
 export default {
   name: "PostCard",
   components: {
+    Avatar,
     NewComment
   },
   props: ['post'],

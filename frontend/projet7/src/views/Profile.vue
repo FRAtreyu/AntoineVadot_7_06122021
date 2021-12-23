@@ -1,11 +1,8 @@
 <template>
   <div class="profile">
-    <div class="user__info">Nom:{{ userInfo.lastname }} {{userInfo.firstname}}</div>
-    <div class="user__info">Pseudo:{{ userInfo.pseudo }}</div>
-    <div class="user__info">Email:{{ userInfo.email }}</div>
-    <v-avatar>
-      <v-img :src="setAvatarUrl" alt="avatar"></v-img>
-    </v-avatar>
+    <div class="user__info">Nom: {{userInfo.firstname}} {{ userInfo.lastname }} </div>
+    <div class="user__info">Pseudo: {{ userInfo.pseudo }}</div>
+    <div class="user__info">Email: {{ userInfo.email }}</div>
     <v-file-input class="avatar__input"
         :rules="rules"
         accept="image/png, image/jpeg, image/bmp"
@@ -37,7 +34,7 @@ import PostCard from "@/components/PostCard";
 
 export default {
   name: "Profile",
-  components: {PostCard},
+  components: { PostCard},
   props: ['pseudo'],
   data: () => ({
     userInfo: {},
@@ -48,10 +45,6 @@ export default {
   }),
 
   computed: {
-    setAvatarUrl(){
-      let imageUrl = this.userInfo.avatar_url.split('.')[1]+"."+this.userInfo.avatar_url.split('.')[2];
-      return "http://localhost:4200"+imageUrl;
-    }
   },
   methods: {
     getUserInfos() {
