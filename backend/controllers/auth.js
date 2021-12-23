@@ -39,7 +39,7 @@ exports.signup = (req, res, next) => {
                             password: hash,
                             deleted: false,
                             role_id: 0,
-                            avatar_url:''
+                            avatar_url:'./images/profile_pictures/1.jpg'
 
                         })
                             .then(function (user) {
