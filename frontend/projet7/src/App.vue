@@ -77,7 +77,8 @@ export default {
     disconnect() {
       this.userConnected = false;
       localStorage.clear();
-      this.$cookies.remove('token')
+      this.$cookies.remove('token');
+      this.$cookies.remove('role')
       this.$router.push({name: 'Login'})
     },
 

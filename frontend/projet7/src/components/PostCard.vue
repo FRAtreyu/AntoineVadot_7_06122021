@@ -5,7 +5,7 @@
         <router-link :to="{name: 'Profile', params: {pseudo: post.user.pseudo}}">
           <v-card-title><Avatar :avatar_url="post.user.avatar_url"></Avatar>{{ post.user.pseudo }}</v-card-title>
         </router-link>
-        <v-card-subtitle>Le {{formatDate}} à {{formatTime}}</v-card-subtitle>
+        <v-card-subtitle>Le {{postDate}} à {{postTime}}</v-card-subtitle>
         <v-card-text>{{ post.post_message }}</v-card-text>
         <div class="v-card__actions">
           <v-card-actions class="actions__icons">
@@ -66,6 +66,7 @@
                   <router-link :to="{name: 'Profile', params: {pseudo: post.user.pseudo}}">
                     <v-card-title><Avatar :avatar_url="comment.user.avatar_url"></Avatar>{{ comment.user.pseudo }}:</v-card-title>
                   </router-link>
+                  <v-card-subtitle>le {{commentDate(comment)}} à {{commentTime(comment)}}</v-card-subtitle>
                   <v-card-text>{{ comment.comment_message }}</v-card-text>
                 </v-card>
                 <v-divider></v-divider>
@@ -80,7 +81,7 @@
 
 <script>
 import NewComment from "@/components/NewComment";
-import moment from "moment";
+
 import Avatar from "@/components/Avatar";
 
 export default {
@@ -114,13 +115,16 @@ export default {
       }
       return totalDislikes;
     },
-    formatDate(){
-      return moment(this.post.createdAt).format('dd.mm.YYYY')
+    postDate(){
+      let date = this.post.createdAt;
+      return new Date(date).toLocaleDateString('fr')
     },
-    formatTime(){
-      let time = this.post.createdAt.split('T')[1];
-      return time.split('.')[0]
-    }
+    postTime(){
+      let time = this.post.createdAt;
+      return new Date(time).toLocaleTimeString('fr')
+    },
+
+
   },
   methods: {
     deletePost() {
@@ -192,6 +196,14 @@ export default {
             }
           }).then(res => res.json())
     },
+    commentDate(comment){
+      let date = comment.createdAt;
+      return new Date(date).toLocaleDateString('fr')
+    },
+    commentTime(comment){
+      let time = comment.createdAt;
+      return new Date(time).toLocaleTimeString('fr')
+    }
 
   },
 

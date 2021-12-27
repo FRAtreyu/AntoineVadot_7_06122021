@@ -4,6 +4,7 @@
     <div class="user__info">Pseudo: {{ userInfo.pseudo }}</div>
     <div class="user__info">Email: {{ userInfo.email }}</div>
     <v-file-input
+        v-if="userInfo.id===userId"
         class="avatar__input"
         :rules="rules"
         accept="image/png, image/jpeg, image/bmp"
@@ -43,7 +44,9 @@ export default {
     postList: [],
     rules: [
       value => !value || value.size < 2000000 || 'Avatar size should be less than 2 MB!',
-    ]
+    ],
+    userId : '',
+    userPseudo:''
   }),
 
   computed: {
@@ -61,7 +64,7 @@ export default {
 
     async setUserInfos() {
       this.userInfo = await this.getUserInfos();
-      console.log(this.userInfo)
+
     },
 
     getUserPosts() {
@@ -94,10 +97,13 @@ export default {
 
   },
   async created() {
-    console.log(this.$route.params.pseudo)
+    this.userPseudo = this.$route.params.pseudo;
     await this.setUserInfos()
     await this.setUserPosts()
+    this.userId=Number(localStorage.getItem('userId'))
   },
+
+
 
 }
 
