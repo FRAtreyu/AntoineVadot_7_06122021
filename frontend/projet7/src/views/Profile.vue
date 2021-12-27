@@ -3,16 +3,20 @@
     <div class="user__info">Nom: {{userInfo.firstname}} {{ userInfo.lastname }} </div>
     <div class="user__info">Pseudo: {{ userInfo.pseudo }}</div>
     <div class="user__info">Email: {{ userInfo.email }}</div>
+    <v-form id="avatar_form" name="avatar_form">
     <v-file-input
+        id="avatar"
         v-if="userInfo.id===userId"
         class="avatar__input"
         :rules="rules"
-        accept="image/png, image/jpeg, image/bmp"
+        accept="image/png, image/jpeg, image/bmp, image/jpg"
         placeholder="Pick an avatar"
         prepend-icon="mdi-camera"
-        label="Avatar"
+        label="avatar"
         name="avatar"
     ></v-file-input>
+    </v-form>
+    <v-btn @click="setAvatar" v-if="userInfo.id===userId">envoyer</v-btn>
     <v-btn
         v-if="this.$cookies.get('role')==='admin'&&this.$route.params.pseudo!=='admin_pseudo'"
         class="mx-2 delete"
@@ -93,6 +97,23 @@ export default {
           location.assign('/post');
         })
       })();
+    },
+
+    setAvatar(){
+      let avatarForm = document.getElementById('avatar_form');
+      let formData = new FormData(avatarForm);
+      console.log(formData);
+      (async () => {
+        return await fetch(`http://localhost:4200/api/user/${this.userInfo.id}/upload`,
+            {
+              method: 'PUT',
+              headers: {
+                'authorization': 'bearer ' + this.$cookies.get('token')
+              },
+              body: formData
+            }).then(res => res.json())
+      })();
+
     }
 
   },
