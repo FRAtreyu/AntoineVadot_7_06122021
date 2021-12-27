@@ -39,7 +39,7 @@ exports.signup = (req, res, next) => {
                             password: hash,
                             deleted: false,
                             role_id: 0,
-                            avatar_url:'./images/profile_pictures/1.jpg'
+                            avatar_url:'./images/profiles_pictures/1.jpg'
 
                         })
                             .then(function (user) {
@@ -72,7 +72,6 @@ exports.login = (req, res) => {
                         'token': jwt.sign(
                             {userId: user.id, userRole: user.role_id},
                             `${process.env.JWT_TOKEN}`,
-                            {expiresIn: '4h'}
                         ),
                         'role': user.role.name,
                         'pseudo': user.pseudo

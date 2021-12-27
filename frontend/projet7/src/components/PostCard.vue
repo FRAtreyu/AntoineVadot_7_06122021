@@ -64,7 +64,7 @@
               <ul v-for="comment in commentList" :key="comment.id">
                 <v-card elevation="5" shaped class="comment">
                   <router-link :to="{name: 'Profile', params: {pseudo: post.user.pseudo}}">
-                    <v-card-title><Avatar :avatar_url="post.user.avatar_url"></Avatar>{{ comment.user.pseudo }}:</v-card-title>
+                    <v-card-title><Avatar :avatar_url="comment.user.avatar_url"></Avatar>{{ comment.user.pseudo }}:</v-card-title>
                   </router-link>
                   <v-card-text>{{ comment.comment_message }}</v-card-text>
                 </v-card>
