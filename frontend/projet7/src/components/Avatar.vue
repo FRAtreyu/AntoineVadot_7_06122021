@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="avatar">
   <v-avatar>
     <v-img :src="avatarUrl" alt="avatar"></v-img>
   </v-avatar>
@@ -28,12 +28,11 @@ export default {
     this.setAvatarUrl()
   },
 
-  updated() {
-    this.setAvatarUrl()
-  }
 }
 </script>
 
 <style scoped>
-
+.avatar{
+  padding-right: 15px;
+}
 </style>

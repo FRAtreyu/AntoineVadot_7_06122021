@@ -31,7 +31,7 @@
               </template>
 
 
-              <v-btn class="menu__btn" v-if="userConnected" @click="disconnect">
+              <v-btn class="menu__btn  disconnect" v-if="userConnected" @click="disconnect">
                 <v-icon>mdi-power</v-icon>
               </v-btn>
 
@@ -122,6 +122,11 @@ a {
 
 .v-container {
   padding: 0;
+}
+
+.disconnect:hover{
+  color: white!important;
+  background-color: red!important;
 }
 
 

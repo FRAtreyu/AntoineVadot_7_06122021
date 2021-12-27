@@ -1,6 +1,7 @@
 const Model = require('../models/Model');
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const jwt = require('jsonwebtoken');
+const fs = require("fs");
 
 exports.getAllUsers = (req, res) => {
     Model.User.findAll({
@@ -39,10 +40,22 @@ exports.setAvatar =  (req, res) => {
     const avatarURL = `${req.file.destination}/${req.file.filename}`
      Model.User.findOne({where:{id : req.params.id}})
         .then(async user => {
-            await user.set({avatar_url: avatarURL});
-            console.log(user.avatar_url)
-            user.save();
-            return res.status(201).json({message: 'avatar uploaded'})
+            if(user.avatar_url==='./images/profiles_pictures/1.jpg'){
+                await user.set({avatar_url: avatarURL});
+                console.log(user.avatar_url)
+                user.save();
+                return res.status(201).json({message: 'avatar uploaded'})
+            }else {
+                let oldAvatar = user.avatar_url.split('.')[1] + "." + user.avatar_url.split('.')[2];
+                fs.unlink(`images/profiles_pictures/${oldAvatar}`, async() =>{
+                    await user.set({avatar_url: avatarURL});
+                    console.log(user.avatar_url)
+                    user.save();
+                    return res.status(201).json({message: 'avatar uploaded'})
+                });
+
+            }
+
         })
         .catch(()=> res.status(500).json({'error':'failed to upload avatar'}))
 };
