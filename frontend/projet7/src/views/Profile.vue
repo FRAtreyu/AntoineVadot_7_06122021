@@ -104,14 +104,16 @@ export default {
       let formData = new FormData(avatarForm);
       console.log(formData);
       (async () => {
-        return await fetch(`http://localhost:4200/api/user/${this.userInfo.id}/upload`,
+        const putResponse = await fetch(`http://localhost:4200/api/user/${this.userInfo.id}/upload`,
             {
               method: 'PUT',
               headers: {
                 'authorization': 'bearer ' + this.$cookies.get('token')
               },
               body: formData
-            }).then(res => res.json())
+            }).then(res => res.json());
+        location.reload();
+        return putResponse;
       })();
 
     }
