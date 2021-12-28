@@ -6,7 +6,7 @@
           <v-card-title><Avatar :avatar_url="post.user.avatar_url"></Avatar>{{ post.user.pseudo }}</v-card-title>
         </router-link>
         <v-card-subtitle>Le {{postDate}} à {{postTime}}</v-card-subtitle>
-        <v-card-text>{{ post.post_message }}</v-card-text>
+        <v-card-text class="post_text">{{ post.post_message }}</v-card-text>
         <div class="v-card__actions">
           <v-card-actions class="actions__icons">
             <v-btn
@@ -67,7 +67,7 @@
                     <v-card-title><Avatar :avatar_url="comment.user.avatar_url"></Avatar>{{ comment.user.pseudo }}:</v-card-title>
                   </router-link>
                   <v-card-subtitle>le {{commentDate(comment)}} à {{commentTime(comment)}}</v-card-subtitle>
-                  <v-card-text>{{ comment.comment_message }}</v-card-text>
+                  <v-card-text class="post_text">{{ comment.comment_message }}</v-card-text>
                 </v-card>
                 <v-divider></v-divider>
               </ul>
@@ -264,5 +264,10 @@ export default {
 
 .comment {
   margin: 5px;
+}
+
+.post_text{
+  color: black!important;
+  font-size: large;
 }
 </style>

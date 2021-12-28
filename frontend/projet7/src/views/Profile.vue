@@ -1,8 +1,10 @@
 <template>
   <div class="profile">
-    <div class="user__info">Nom: {{userInfo.firstname}} {{ userInfo.lastname }} </div>
-    <div class="user__info">Pseudo: {{ userInfo.pseudo }}</div>
-    <div class="user__info">Email: {{ userInfo.email }}</div>
+    <div class="user__info"><span class="userInfos">Nom</span> : {{userInfo.firstname}} {{ userInfo.lastname }} </div>
+    <div class="user__info"><span class="userInfos">Pseudo</span> : {{ userInfo.pseudo }}</div>
+    <div class="user__info"><span class="userInfos">Email</span> : {{ userInfo.email }}</div>
+    <div class="user__info"><span class="userInfos">Nombre de posts</span> : {{ postNumber }}</div>
+    <div class="user__info"><span class="userInfos">Inscrit depuis le </span> : {{ inscriptionDate }}</div>
     <v-form id="avatar_form" name="avatar_form">
     <v-file-input
         id="avatar"
@@ -16,7 +18,7 @@
         name="avatar"
     ></v-file-input>
     </v-form>
-    <v-btn @click="setAvatar" v-if="userInfo.id===userId">envoyer</v-btn>
+    <v-btn @click="setAvatar" v-if="userInfo.id===userId" class="send_avatar">envoyer</v-btn>
     <v-btn
         v-if="this.$cookies.get('role')==='admin'&&this.$route.params.pseudo!=='admin_pseudo'"
         class="mx-2 delete"
@@ -39,9 +41,10 @@
 <script>
 import PostCard from "@/components/PostCard";
 
+
 export default {
   name: "Profile",
-  components: { PostCard},
+  components: {PostCard},
   props: ['pseudo'],
   data: () => ({
     userInfo: {},
@@ -54,6 +57,13 @@ export default {
   }),
 
   computed: {
+    postNumber(){
+      return this.postList.length
+    },
+    inscriptionDate(){
+      let date = this.userInfo.createdAt;
+      return new Date(date).toLocaleDateString('fr')
+    },
   },
   methods: {
     getUserInfos() {
@@ -68,6 +78,7 @@ export default {
 
     async setUserInfos() {
       this.userInfo = await this.getUserInfos();
+      console.log(this.userInfo)
 
     },
 
@@ -135,5 +146,26 @@ export default {
 <style scoped>
 .avatar__input{
   width: 200px;
+}
+.profile{
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.user__posts{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.send_avatar{
+  width: 90px;
+}
+
+.userInfos{
+  color: black!important;
+  text-decoration: underline;
+  font-size: large;
 }
 </style>

@@ -30,7 +30,7 @@ const User = sequelize.define('user', {
         avatar_url: {type: Sequelize.STRING, allowNull: true, default:''}
     },
     {
-        tableName: 'user', timestamps: false, underscored: true
+        tableName: 'user', underscored: true
     });
 exports.User = User;
 
