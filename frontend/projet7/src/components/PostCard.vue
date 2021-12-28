@@ -273,7 +273,7 @@ export default {
 }
 
 .post__card__title{
-  background-color: #6868AB;
+  background-color: $primary;
   color: #FCEA67;
   border-radius: 15px 0 15px 0;
 }
