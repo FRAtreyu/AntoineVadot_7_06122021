@@ -2,7 +2,7 @@
   <v-app id="inspire">
     <v-app-bar
         app
-        color=#D9D9EA
+        color=#6868AB
         flat class="v-app-bar"
     >
       <v-container class="py-0 fill-height logo">

@@ -3,7 +3,7 @@
     <v-lazy class="v-card__post">
       <v-card elevation="6" shaped>
         <router-link :to="{name: 'Profile', params: {pseudo: post.user.pseudo}}">
-          <v-card-title><Avatar :avatar_url="post.user.avatar_url"></Avatar>{{ post.user.pseudo }}</v-card-title>
+          <v-card-title class="post__card__title"><Avatar :avatar_url="post.user.avatar_url"></Avatar>{{ post.user.pseudo }}</v-card-title>
         </router-link>
         <v-card-subtitle>Le {{postDate}} à {{postTime}}</v-card-subtitle>
         <v-card-text class="post_text">{{ post.post_message }}</v-card-text>
@@ -51,11 +51,12 @@
             </v-btn>
           </v-card-actions>
         </div>
-        <v-expansion-panels>
-          <v-expansion-panel>
+        <v-expansion-panels >
+          <v-expansion-panel class="comment__panel">
             <v-expansion-panel-header
                 disable-icon-rotate
-                hide-actions>
+                hide-actions
+                class="comment__panel">
               Voir les {{ commentList.length }} commentaires
             </v-expansion-panel-header>
             <v-expansion-panel-content>
@@ -64,7 +65,7 @@
               <ul v-for="comment in commentList" :key="comment.id">
                 <v-card elevation="5" shaped class="comment">
                   <router-link :to="{name: 'Profile', params: {pseudo: post.user.pseudo}}">
-                    <v-card-title><Avatar :avatar_url="comment.user.avatar_url"></Avatar>{{ comment.user.pseudo }}:</v-card-title>
+                    <v-card-title class="post__card__title"><Avatar :avatar_url="comment.user.avatar_url"></Avatar>{{ comment.user.pseudo }}</v-card-title>
                   </router-link>
                   <v-card-subtitle>le {{commentDate(comment)}} à {{commentTime(comment)}}</v-card-subtitle>
                   <v-card-text class="post_text">{{ comment.comment_message }}</v-card-text>
@@ -269,5 +270,16 @@ export default {
 .post_text{
   color: black!important;
   font-size: large;
+}
+
+.post__card__title{
+  background-color: #6868AB;
+  color: #FCEA67;
+  border-radius: 15px 0 15px 0;
+}
+
+.comment__panel{
+  background-color: #d9d9ea;
+  border-radius: 15px 0 15px 0;
 }
 </style>
