@@ -2,7 +2,7 @@
   <v-app id="inspire">
     <v-app-bar
         app
-        color="white"
+        color=#D9D9EA
         flat class="v-app-bar"
     >
       <v-container class="py-0 fill-height logo">
@@ -14,11 +14,11 @@
       </v-container>
     </v-app-bar>
 
-    <v-main class="grey lighten-3">
+    <v-main class=" main">
       <v-container>
         <v-row>
           <v-col cols="3">
-            <v-sheet rounded="lg" class="menu grey lighten-3">
+            <v-sheet rounded="lg" class="menu">
 
               <router-link to="/post">
                 <v-btn class="menu__btn" v-if="userConnected">Mur</v-btn>
@@ -102,6 +102,7 @@ export default {
 .menu {
   display: flex;
   flex-direction: row;
+  background-color: #A1A1CA!important;
 }
 
 .menu__btn {
@@ -129,5 +130,8 @@ a {
   background-color: red!important;
 }
 
+.main{
+  background-color: #A1A1CA!important;
+}
 
 </style>

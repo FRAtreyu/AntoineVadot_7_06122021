@@ -13,7 +13,7 @@
                 class="mx-2 like__btn"
                 fab
                 small
-                color="primary"
+                color=#68AB68
                 @click="likePost"
             >
               <v-icon>
@@ -28,7 +28,7 @@
                 fab
                 small
                 dark
-                color="red"
+                color=#AB6868
                 @click="dislikePost"
             >
               <v-icon>
