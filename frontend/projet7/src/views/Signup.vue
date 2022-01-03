@@ -183,7 +183,7 @@ export default {
   padding-top: 5%;
 }
 
-.form__btn{
+.form__btn {
   margin-bottom: 15px;
 }
 </style>

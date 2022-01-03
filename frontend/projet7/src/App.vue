@@ -73,6 +73,9 @@ export default {
   methods: {
     setUserConnected() {
       if (this.$cookies.get('token')) this.userConnected = true;
+      else {
+        this.$router.push({name: 'Login'})
+      }
     },
     disconnect() {
       this.userConnected = false;
@@ -90,6 +93,7 @@ export default {
 </script>
 <style lang="scss">
 @import "styles/variables";
+
 .row {
   display: flex;
   flex-direction: column;
@@ -103,7 +107,7 @@ export default {
 .menu {
   display: flex;
   flex-direction: row;
-  background-color: $secondary-color!important;
+  background-color: $secondary-color !important;
 }
 
 .menu__btn {
@@ -126,16 +130,17 @@ a {
   padding: 0;
 }
 
-.disconnect:hover{
-  color: white!important;
-  background-color: red!important;
+.disconnect:hover {
+  color: white !important;
+  background-color: red !important;
 }
 
-.main{
-  background-color:$secondary-color!important;
+.main {
+  background-color: $secondary-color !important;
 }
-.v-app-bar{
-  color: $primary-color!important;
+
+.v-app-bar {
+  color: $primary-color !important;
 }
 
 </style>

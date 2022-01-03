@@ -3,9 +3,12 @@
     <v-lazy class="v-card__post">
       <v-card elevation="6" shaped>
         <router-link :to="{name: 'Profile', params: {pseudo: post.user.pseudo}}">
-          <v-card-title class="post__card__title"><Avatar :avatar_url="post.user.avatar_url"></Avatar>{{ post.user.pseudo }}</v-card-title>
+          <v-card-title class="post__card__title">
+            <Avatar :avatar_url="post.user.avatar_url"></Avatar>
+            {{ post.user.pseudo }}
+          </v-card-title>
         </router-link>
-        <v-card-subtitle>Le {{postDate}} à {{postTime}}</v-card-subtitle>
+        <v-card-subtitle>Le {{ postDate }} à {{ postTime }}</v-card-subtitle>
         <v-card-text class="post_text">{{ post.post_message }}</v-card-text>
         <div class="v-card__actions">
           <v-card-actions class="actions__icons">
@@ -36,7 +39,7 @@
             </v-btn>
             <div class="dislikes">{{ countDislikes }}</div>
           </v-card-actions>
-          <v-card-actions v-if="getRole==='admin'" class="actions__icons">
+          <v-card-actions v-if="getRole==='admin' || userId===Number(post.user.id)" class="actions__icons">
             <v-btn
                 class="mx-2 delete"
                 fab
@@ -50,7 +53,7 @@
             </v-btn>
           </v-card-actions>
         </div>
-        <v-expansion-panels >
+        <v-expansion-panels>
           <v-expansion-panel class="comment__panel">
             <v-expansion-panel-header
                 disable-icon-rotate
@@ -64,11 +67,14 @@
               <ul v-for="comment in commentList" :key="comment.id">
                 <v-card elevation="5" shaped class="comment">
                   <router-link :to="{name: 'Profile', params: {pseudo: post.user.pseudo}}">
-                    <v-card-title class="post__card__title"><Avatar :avatar_url="comment.user.avatar_url"></Avatar>{{ comment.user.pseudo }}</v-card-title>
+                    <v-card-title class="post__card__title">
+                      <Avatar :avatar_url="comment.user.avatar_url"></Avatar>
+                      {{ comment.user.pseudo }}
+                    </v-card-title>
                   </router-link>
-                  <v-card-subtitle>le {{commentDate(comment)}} à {{commentTime(comment)}}</v-card-subtitle>
+                  <v-card-subtitle>le {{ commentDate(comment) }} à {{ commentTime(comment) }}</v-card-subtitle>
                   <v-card-text class="post_text">{{ comment.comment_message }}</v-card-text>
-                  <v-card-actions v-if="getRole==='admin'" class="actions__icons">
+                  <v-card-actions v-if="getRole==='admin'|| userId===Number(comment.user.id)" class="actions__icons">
                     <v-btn
                         class="mx-2 delete"
                         fab
@@ -105,7 +111,7 @@ export default {
   },
   props: ['post'],
   data: () => ({
-    userId: localStorage.getItem('userId'),
+    userId: Number(localStorage.getItem('userId')),
     likes: 0,
     dislikes: 0,
     commentList: [],
@@ -128,15 +134,15 @@ export default {
       }
       return totalDislikes;
     },
-    postDate(){
+    postDate() {
       let date = this.post.createdAt;
       return new Date(date).toLocaleDateString('fr')
     },
-    postTime(){
+    postTime() {
       let time = this.post.createdAt;
       return new Date(time).toLocaleTimeString('fr')
     },
-    getRole(){
+    getRole() {
       return this.$cookies.get('role')
     }
 
@@ -159,7 +165,7 @@ export default {
       })();
 
     },
-    deleteComment(commentId){
+    deleteComment(commentId) {
       (async () => {
         const deleteResponse = await fetch(`http://localhost:4200/api/post/comment/${commentId}`,
             {
@@ -227,11 +233,11 @@ export default {
             }
           }).then(res => res.json())
     },
-    commentDate(comment){
+    commentDate(comment) {
       let date = comment.createdAt;
       return new Date(date).toLocaleDateString('fr')
     },
-    commentTime(comment){
+    commentTime(comment) {
       let time = comment.createdAt;
       return new Date(time).toLocaleTimeString('fr')
     }
@@ -250,6 +256,7 @@ export default {
 
 <style scoped lang="scss">
 @import "src/styles/variables";
+
 .v-card__post {
   width: 100%;
   max-width: 800px;
@@ -298,18 +305,18 @@ export default {
   margin: 5px;
 }
 
-.post_text{
-  color: black!important;
+.post_text {
+  color: black !important;
   font-size: large;
 }
 
-.post__card__title{
+.post__card__title {
   background-color: $primary-color;
   color: #FCEA67;
   border-radius: 15px 0 15px 0;
 }
 
-.comment__panel{
+.comment__panel {
   background-color: #d9d9ea;
   border-radius: 15px 0 15px 0;
 }

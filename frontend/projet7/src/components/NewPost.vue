@@ -1,5 +1,5 @@
 <template>
-  <v-form ref="form"  class="newPostText">
+  <v-form ref="form" class="newPostText">
     <v-textarea
         outlined
         clearable
@@ -39,10 +39,10 @@ export default {
             post_message: this.post_message
           })
         })
-        this.post_message='';
+        this.post_message = '';
         this.$emit('new-post');
         return response.json();
-      }) ();
+      })();
 
     }
   }

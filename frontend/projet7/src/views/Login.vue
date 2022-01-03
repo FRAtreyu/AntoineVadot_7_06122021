@@ -14,9 +14,7 @@ export default {
     email: '',
     password: ''
   }),
-  computed: {
-
-  },
+  computed: {},
   methods: {
     send() {
       (async () => {
@@ -34,18 +32,18 @@ export default {
             })
         const content = await rawResponse.json();
         console.log(content);
-        if(content.userId){
+        if (content.userId) {
           location.replace('/post')
           localStorage.setItem('userId', content.userId);
           localStorage.setItem('userPseudo', content.pseudo);
-          this.$cookies.set('token',content.token,Infinity);
-          this.$cookies.set('role', content.role,Infinity)
+          this.$cookies.set('token', content.token, Infinity);
+          this.$cookies.set('role', content.role, Infinity)
         } else alert(content.error)
 
       })();
     },
-    checkConnected(){
-      if( this.$cookies.get('token')) location.replace('/post')
+    checkConnected() {
+      if (this.$cookies.get('token')) location.replace('/post')
     }
   },
   beforeMount() {
@@ -56,12 +54,13 @@ export default {
 
 <style scoped lang="scss">
 
-#bloc{
+#bloc {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  &v-text-field{
+
+  &v-text-field {
     width: 70%;
   }
 }

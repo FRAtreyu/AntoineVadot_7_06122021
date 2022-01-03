@@ -11,7 +11,7 @@ exports.deleteComment = (req, res) => {
             if (commentFound) {
                 Model.User.findOne({where: {id: userId}, include: Model.Role})
                     .then(userFound => {
-                        if (userFound.role.name === 'admin') {
+                        if (userFound.role.name === 'admin' || userFound.id === userId) {
                             commentFound.set({deleted: true});
                             commentFound.save();
                             return res.status(201).json({message: 'comment deleted'})

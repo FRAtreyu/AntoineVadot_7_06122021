@@ -18,20 +18,52 @@
           name="avatar"
       ></v-file-input>
     </v-form>
-    <v-btn @click="setAvatar" v-if="userInfo.id===userId" class="send_avatar">envoyer</v-btn>
-    <div class="delete__user" v-if="this.$cookies.get('role')==='admin'&&this.$route.params.pseudo!=='admin' || userInfo.id===userId&&this.$route.params.pseudo!=='admin'">
-      <v-btn
-          class="mx-2 delete"
-          fab
-          small
-          color="red"
-          @click="deleteUser"
+    <v-btn @click="setAvatar" v-if="userInfo.id===userId" class="send_avatar">Envoyer</v-btn>
+    <div class="delete__user"
+         v-if="this.$cookies.get('role')==='admin'&&this.$route.params.pseudo!=='admin' || userInfo.id===userId&&this.$route.params.pseudo!=='admin'">
+      <v-dialog
+          v-model="dialog"
+          persistent
+          max-width="290"
       >
-        <v-icon>
-          mdi-delete
-        </v-icon>
-      </v-btn>
-      <span>Supprimer le compte</span>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+              color="primary"
+              dark
+              v-bind="attrs"
+              v-on="on"
+          >
+            Supprimer le compte
+          </v-btn>
+        </template>
+        <v-card>
+          <v-card-title class="text-sm-h6">
+            Désactiver ce compte ?
+          </v-card-title>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+                color="green darken-1"
+                text
+                @click="dialog = false"
+            >
+              Retour
+            </v-btn>
+            <v-btn
+                class="mx-2 delete"
+                fab
+                small
+                color="red"
+                @click="deleteUser"
+            >
+              <v-icon>
+                mdi-delete
+              </v-icon>
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
     </div>
     <ul class="user__posts">
       <PostCard v-for="post in postList" :key="post.id" v-bind:post="post" @update-like="setUserPosts"
@@ -56,7 +88,8 @@ export default {
       value => !value || value.size < 2000000 || 'Avatar size should be less than 2 MB!',
     ],
     userId: '',
-    userPseudo: ''
+    userPseudo: '',
+    dialog: false
   }),
 
   computed: {

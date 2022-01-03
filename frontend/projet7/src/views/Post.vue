@@ -1,9 +1,10 @@
 <template>
   <div class="home">
-    <NewPost @new-post="setPostList" ></NewPost>
+    <NewPost @new-post="setPostList"></NewPost>
     <ul v-if="postList.length!==0">
-        <PostCard v-for="post in postList" v-bind:post="post" :key="post.id" @update-like="setPostList" @delete-post="setPostList"
-        ></PostCard>
+      <PostCard v-for="post in postList" v-bind:post="post" :key="post.id" @update-like="setPostList"
+                @delete-post="setPostList"
+      ></PostCard>
     </ul>
   </div>
 </template>

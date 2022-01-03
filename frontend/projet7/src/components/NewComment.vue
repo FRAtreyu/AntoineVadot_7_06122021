@@ -1,5 +1,5 @@
 <template>
-  <v-form ref="form"  class="newCommentText">
+  <v-form ref="form" class="newCommentText">
     <v-textarea
         outlined
         clearable
@@ -20,7 +20,7 @@
 <script>
 export default {
   name: "NewComment",
-  props:['post_id'],
+  props: ['post_id'],
   data: () => ({
     comment_message: '',
     rules: [v => v.length <= 255 || 'Max 255 characters'],
@@ -40,10 +40,10 @@ export default {
             comment_message: this.comment_message
           })
         })
-        this.comment_message='';
+        this.comment_message = '';
         this.$emit('new-comment')
         return response.json();
-      }) ();
+      })();
 
     }
   }
