@@ -97,3 +97,4 @@ Like.belongsTo(User);
 
 
 sequelize.sync({logging: console.log});
+sequelize.query("REPLACE INTO role (id, name) VALUES ('0', 'user'), ('1', 'admin' )");
