@@ -1,5 +1,4 @@
 const Model = require('../models/Model');
-const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const jwt = require('jsonwebtoken');
 const fs = require("fs");
 
@@ -66,13 +65,12 @@ exports.deleteUser = (req, res) => {
     const decodedToken = jwt.verify(token, `${process.env.JWT_TOKEN}`);
     const askingUserId = decodedToken.userId;
     Model.User.findOne({
-        attributes: ['id', 'role_id'],
         where: {id: askingUserId},
         include: Model.Role
     })
         .then(function (userFound) {
             console.log(userFound);
-            if (userFound.role.name === 'admin') {
+            if (userFound.role.name === 'admin' || userFound.id===Number(userId)) {
                 Model.User.findOne({
                     attributes: ['id', 'deleted'],
                     where: {id: userId}

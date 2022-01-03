@@ -134,15 +134,19 @@ export default {
     },
     deleteUser() {
       (async () => {
-        return await fetch(`http://localhost:4200/api/user/${this.userInfo.id}`,
+        let deleteResponse = await fetch(`http://localhost:4200/api/user/${this.userInfo.id}`,
             {
               method: 'DELETE',
               headers: {
                 'authorization': 'bearer ' + this.$cookies.get('token')
               }
-            }).then(() => {
-          location.assign('/post');
-        })
+            })
+          localStorage.clear();
+          this.$cookies.remove('token');
+          this.$cookies.remove('role');
+          this.$router.push({name: 'Login'});
+        location.reload();
+        return deleteResponse
       })();
     },
 

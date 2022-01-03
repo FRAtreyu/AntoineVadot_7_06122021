@@ -16,6 +16,7 @@ export default {
   }),
   computed: {},
   methods: {
+    //connecte l'utilisateur et enregistre les données de connections dans des cookies et dans le localStorage
     send() {
       (async () => {
         const rawResponse = await fetch('http://localhost:4200/api/auth/login/',
@@ -42,6 +43,7 @@ export default {
 
       })();
     },
+    //si utilisateur connecté définie la page d'accueil sur post et plus sur login
     checkConnected() {
       if (this.$cookies.get('token')) location.replace('/post')
     }

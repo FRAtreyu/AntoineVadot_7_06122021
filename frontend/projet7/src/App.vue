@@ -71,12 +71,14 @@ export default {
   components: {},
   computed: {},
   methods: {
+    //vérifie si un utilisateur est connecté par la présence d'un cookie, sinon redirige toutes les pages vers la page login
     setUserConnected() {
       if (this.$cookies.get('token')) this.userConnected = true;
       else {
         this.$router.push({name: 'Login'})
       }
     },
+    //deconnecte l'utilisateur et efface les données dans le localStorage et les cookies
     disconnect() {
       this.userConnected = false;
       localStorage.clear();
