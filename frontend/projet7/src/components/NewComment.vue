@@ -12,7 +12,7 @@
         v-model="comment_message"
     ></v-textarea>
     <v-btn @click="send">
-      Envoyer
+      Commenter
     </v-btn>
   </v-form>
 </template>

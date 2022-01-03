@@ -11,7 +11,7 @@
         v-model="post_message"
     ></v-textarea>
     <v-btn @click="send">
-      Envoyer
+      Poster
     </v-btn>
   </v-form>
 

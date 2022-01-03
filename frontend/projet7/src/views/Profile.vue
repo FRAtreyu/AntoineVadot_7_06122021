@@ -19,7 +19,7 @@
       ></v-file-input>
     </v-form>
     <v-btn @click="setAvatar" v-if="userInfo.id===userId" class="send_avatar">envoyer</v-btn>
-    <div class="delete__user" v-if="this.$cookies.get('role')==='admin'&&this.$route.params.pseudo!=='admin_pseudo' || userInfo.id===userId">
+    <div class="delete__user" v-if="this.$cookies.get('role')==='admin'&&this.$route.params.pseudo!=='admin' || userInfo.id===userId&&this.$route.params.pseudo!=='admin'">
       <v-btn
           class="mx-2 delete"
           fab

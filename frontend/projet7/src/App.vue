@@ -89,6 +89,7 @@ export default {
 }
 </script>
 <style lang="scss">
+@import "styles/variables";
 .row {
   display: flex;
   flex-direction: column;
@@ -102,7 +103,7 @@ export default {
 .menu {
   display: flex;
   flex-direction: row;
-  background-color: #A1A1CA!important;
+  background-color: $secondary-color!important;
 }
 
 .menu__btn {
@@ -131,7 +132,10 @@ a {
 }
 
 .main{
-  background-color: #A1A1CA!important;
+  background-color:$secondary-color!important;
+}
+.v-app-bar{
+  color: $primary-color!important;
 }
 
 </style>

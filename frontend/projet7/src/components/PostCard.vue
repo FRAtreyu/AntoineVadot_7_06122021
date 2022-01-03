@@ -27,7 +27,6 @@
                 class="mx-2"
                 fab
                 small
-                dark
                 color=#AB6868
                 @click="dislikePost"
             >
@@ -37,7 +36,7 @@
             </v-btn>
             <div class="dislikes">{{ countDislikes }}</div>
           </v-card-actions>
-          <v-card-actions v-if="this.$cookies.get('role')==='admin'" class="actions__icons">
+          <v-card-actions v-if="getRole==='admin'" class="actions__icons">
             <v-btn
                 class="mx-2 delete"
                 fab
@@ -69,6 +68,19 @@
                   </router-link>
                   <v-card-subtitle>le {{commentDate(comment)}} à {{commentTime(comment)}}</v-card-subtitle>
                   <v-card-text class="post_text">{{ comment.comment_message }}</v-card-text>
+                  <v-card-actions v-if="getRole==='admin'" class="actions__icons">
+                    <v-btn
+                        class="mx-2 delete"
+                        fab
+                        small
+                        color="red"
+                        @click="deleteComment(comment.id)"
+                    >
+                      <v-icon>
+                        mdi-delete
+                      </v-icon>
+                    </v-btn>
+                  </v-card-actions>
                 </v-card>
                 <v-divider></v-divider>
               </ul>
@@ -124,6 +136,9 @@ export default {
       let time = this.post.createdAt;
       return new Date(time).toLocaleTimeString('fr')
     },
+    getRole(){
+      return this.$cookies.get('role')
+    }
 
 
   },
@@ -143,6 +158,21 @@ export default {
         return deleteResponse
       })();
 
+    },
+    deleteComment(commentId){
+      (async () => {
+        const deleteResponse = await fetch(`http://localhost:4200/api/post/comment/${commentId}`,
+            {
+              method: 'DELETE',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'authorization': 'bearer ' + this.$cookies.get('token')
+              }
+            });
+        await this.setCommentList();
+        return deleteResponse
+      })();
     },
     likePost() {
       (async () => {
@@ -219,6 +249,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "src/styles/variables";
 .v-card__post {
   width: 100%;
   max-width: 800px;
@@ -273,7 +304,7 @@ export default {
 }
 
 .post__card__title{
-  background-color: $primary;
+  background-color: $primary-color;
   color: #FCEA67;
   border-radius: 15px 0 15px 0;
 }
